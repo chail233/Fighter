@@ -18,6 +18,9 @@ export class BootScene extends Phaser.Scene {
         gameState.inventory.equipment.push(playerGun);
         gameState.enemy.equipment.push(enemyGun);
 
-        this.scene.start('BattleScene');
+        // 初始金币用于测试商店
+        gameState.player.gold = 100;
+
+        this.scene.start('MenuScene');
     }
 }
