@@ -14,6 +14,7 @@ class GameState {
 
         this.player = {
             name: '玩家',
+            texture: 'Ki-61',
             level: 1,
             hp: 100,
             maxHp: 100,
@@ -29,6 +30,7 @@ class GameState {
 
         this.enemy = {
             name: '敌人',
+            texture: 'N1K-J',
             level: 1,
             hp: 50,
             maxHp: 50,
@@ -49,6 +51,7 @@ class GameState {
     reset() {
         this.player = {
             name: '玩家',
+            texture: 'Ki-61',
             level: 1,
             hp: 100,
             maxHp: 100,
@@ -59,6 +62,7 @@ class GameState {
         this.inventory = { equipment: [], items: [] };
         this.enemy = {
             name: '敌人',
+            texture: 'N1K-J',
             level: 1,
             hp: 50,
             maxHp: 50,

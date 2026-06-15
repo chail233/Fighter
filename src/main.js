@@ -1,5 +1,5 @@
-import { GameScene } from './scenes/GameScene.js';
 import { BootScene } from './scenes/BootScene.js';
+import { BattleScene } from './scenes/BattleScene.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -13,7 +13,7 @@ const config = {
             debug: false,
         },
     },
-    scene: [BootScene, GameScene],
+    scene: [BootScene, BattleScene],
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
