@@ -1,4 +1,6 @@
 import gameState from '../GameState.js';
+import gameManager from '../GameManager.js';
+import { BattleHud } from '../ui/BattleHud.js';
 
 export class BattleScene extends Phaser.Scene {
     constructor() {
@@ -31,12 +33,22 @@ export class BattleScene extends Phaser.Scene {
         }
         ground.strokePath();
 
-        // 加载玩家飞机（左下）
+        // 玩家飞机（左下）
         const playerSprite = this.add.image(200, 560, gameState.player.texture);
         playerSprite.setScale(0.3);
 
-        // 加载敌人飞机（右上）
+        // 敌人飞机（右上）
         const enemySprite = this.add.image(1080, 160, gameState.enemy.texture);
         enemySprite.setScale(0.3);
+
+        // 战斗 HUD
+        this.hud = new BattleHud(this);
+        this.hud.bindPlayer(gameState.player, gameState.inventory);
+        this.hud.bindEnemy(gameState.enemy);
+    }
+
+    update(time, delta) {
+        gameManager.update(delta);
+        this.hud.update(gameState.player, gameState.enemy);
     }
 }

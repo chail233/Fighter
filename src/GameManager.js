@@ -11,6 +11,11 @@ class GameManager {
         }
         GameManager._instance = this;
     }
+
+    /** 主更新循环，由场景每帧调用 */
+    update(delta) {
+        // 后续填充战斗逻辑
+    }
 }
 
 const gameManager = new GameManager();
