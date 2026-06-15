@@ -18,8 +18,7 @@ class GameState {
             level: 1,
             hp: 100,
             maxHp: 100,
-            attack: 10,
-            defense: 5,
+            defense: 0,
             gold: 0,
         };
 
@@ -34,8 +33,7 @@ class GameState {
             level: 1,
             hp: 50,
             maxHp: 50,
-            attack: 5,
-            defense: 2,
+            defense: 0,
             equipment: [],     // 敌人装备（最多 EQUIPMENT_SLOTS）
         };
 
@@ -55,8 +53,7 @@ class GameState {
             level: 1,
             hp: 100,
             maxHp: 100,
-            attack: 10,
-            defense: 5,
+            defense: 0,
             gold: 0,
         };
         this.inventory = { equipment: [], items: [] };
@@ -66,8 +63,7 @@ class GameState {
             level: 1,
             hp: 50,
             maxHp: 50,
-            attack: 5,
-            defense: 2,
+            defense: 0,
             equipment: [],
         };
         this.progress = { currentStage: 1, maxStage: 1, totalKills: 0 };

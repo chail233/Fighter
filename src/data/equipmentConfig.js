@@ -19,11 +19,12 @@ export const EQUIPMENT_CONFIGS = {
     gun: {
         id: 'gun',
         name: '机枪',
-        description: '快速射击，每次造成装备强度的伤害,并使装备强度加1',
+        description: '快速射击，每次造成攻击伤害,并使装备强度加1',
         value: 10,
         cooldown: 1,
-        effect: (owner, target) => {
-            target.hp -= owner.attack;
+        effect: (owner, target, gm, eq) => {
+            gm.dealDamage(eq.value, target);
+            eq.value += 1;
         },
     },
 };

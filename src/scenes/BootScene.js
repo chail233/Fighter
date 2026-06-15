@@ -1,3 +1,6 @@
+import gameState from '../GameState.js';
+import { createEquipment } from '../data/equipmentConfig.js';
+
 export class BootScene extends Phaser.Scene {
     constructor() {
         super({ key: 'BootScene' });
@@ -9,6 +12,12 @@ export class BootScene extends Phaser.Scene {
     }
 
     create() {
+        // 给双方各配一把初始机枪
+        const playerGun = createEquipment('gun');
+        const enemyGun = createEquipment('gun');
+        gameState.inventory.equipment.push(playerGun);
+        gameState.enemy.equipment.push(enemyGun);
+
         this.scene.start('BattleScene');
     }
 }
