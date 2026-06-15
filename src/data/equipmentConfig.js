@@ -23,7 +23,7 @@ export const EQUIPMENT_CONFIGS = {
         value: 10,
         cooldown: 1,
         effect: (owner, target, gm, eq) => {
-            gm.dealDamage(eq.value, target);
+            const actual = gm.dealDamage(eq.value, target, target.name, eq.name);
             eq.value += 1;
         },
     },

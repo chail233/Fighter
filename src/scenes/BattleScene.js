@@ -1,6 +1,7 @@
 import gameState from '../GameState.js';
 import gameManager from '../GameManager.js';
 import { BattleHud } from '../ui/BattleHud.js';
+import { CombatLog } from '../ui/CombatLog.js';
 
 export class BattleScene extends Phaser.Scene {
     constructor() {
@@ -45,10 +46,15 @@ export class BattleScene extends Phaser.Scene {
         this.hud = new BattleHud(this);
         this.hud.bindPlayer(gameState.player, gameState.inventory);
         this.hud.bindEnemy(gameState.enemy);
+
+        // 战斗日志（左上角）
+        this.combatLog = new CombatLog(this, 10, 90);
+        gameManager.bindLog(this.combatLog);
     }
 
     update(time, delta) {
         gameManager.update(delta);
         this.hud.update(gameState.player, gameState.enemy);
+        this.combatLog.update();
     }
 }
