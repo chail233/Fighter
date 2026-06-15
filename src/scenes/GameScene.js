@@ -4,13 +4,13 @@ export class GameScene extends Phaser.Scene {
     }
 
     create() {
-        this.add.text(400, 300, 'Fighter', {
+        this.add.text(640, 330, 'Fighter', {
             fontSize: '48px',
             fontFamily: 'Arial',
-            color: '#ffffff',
+            color: '#888888',
         }).setOrigin(0.5);
 
-        this.add.text(400, 360, 'Phaser 3 格斗游戏', {
+        this.add.text(640, 380, '战斗机', {
             fontSize: '18px',
             fontFamily: 'Arial',
             color: '#888888',
