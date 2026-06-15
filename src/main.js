@@ -3,9 +3,8 @@ import { BootScene } from './scenes/BootScene.js';
 
 const config = {
     type: Phaser.AUTO,
-    width: 800,
-    height: 600,
-    parent: document.body,
+    width: 1280,
+    height: 720,
     backgroundColor: '#1a1a2e',
     physics: {
         default: 'arcade',
