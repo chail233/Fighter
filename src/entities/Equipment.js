@@ -2,17 +2,23 @@
 // 职责：定义装备运行时状态（名字、CD、效果触发）
 // 不应：存放装备静态配置
 
+import gameManager from '../GameManager.js';
+
 export class Equipment {
     /**
      * @param {object} config - 装备配置对象
      * @param {string} config.id - 装备唯一标识
      * @param {string} config.name - 装备名
+     * @param {string} config.description - 装备描述
+     * @param {number} config.value - 装备数值（伤害量/治疗量/护盾量等）
      * @param {number} config.cooldown - 冷却时间（秒）
-     * @param {Function} config.effect - CD 结束时执行的效果 (owner, target) => void
+     * @param {Function} config.effect - CD 结束时执行的效果 (owner, target, gameManager, equipment) => void
      */
     constructor(config) {
         this.id = config.id || '';
         this.name = config.name || '未命名装备';
+        this.description = config.description || '';
+        this.value = config.value || 0;         // 装备数值
         this.cooldown = config.cooldown || 0;   // 总冷却（秒）
         this.effect = config.effect || null;    // CD 结束时回调
 
@@ -44,7 +50,7 @@ export class Equipment {
         this.cooldownTimer = this.cooldown;
 
         if (typeof this.effect === 'function') {
-            this.effect(owner, target);
+            this.effect(owner, target, gameManager, this);
         }
     }
 

@@ -16,10 +16,12 @@ export function createEquipment(id) {
 }
 
 export const EQUIPMENT_CONFIGS = {
-    ironSword: {
+    gun: {
         id: 'gun',
         name: '机枪',
-        cooldown: 1,            // 3 秒 CD
+        description: '快速射击，每次造成装备强度的伤害,并使装备强度加1',
+        value: 10,
+        cooldown: 1,
         effect: (owner, target) => {
             target.hp -= owner.attack;
         },
