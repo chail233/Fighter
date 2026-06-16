@@ -7,7 +7,7 @@ import { createEquipment, EQUIPMENT_CONFIGS } from '../data/equipmentConfig.js';
 
 class InventorySystem {
     constructor() {
-        this.log = () => {};
+        this.log = (text) => console.log(text);
     }
 
     bindLogger(logFn) {

@@ -17,9 +17,6 @@ class GameManager {
 
     bindLog(combatLog) {
         battleSystem.bindLogger((text) => combatLog.add(text));
-        inventorySystem.bindLogger((text) => {
-            if (combatLog) combatLog.add(text);
-        });
     }
 
     // ========== 战斗（委托 BattleSystem） ==========
