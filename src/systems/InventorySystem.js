@@ -45,15 +45,16 @@ class InventorySystem {
     }
 
     handleEquipSlotClick(slotIndex) {
+        // 点击已有装备的槽位 → 卸下
         if (slotIndex < gameState.inventory.equipment.length) {
             return this.unequip(slotIndex);
-        } else if (gameState.inventory.items.length > 0) {
-            return this.equip(0);
         }
+        // 点击空槽位 → 不做任何事
         return false;
     }
 
     handleBackpackClick(backpackIndex) {
+        // 点击背包中的装备 → 装备到第一个空槽位
         if (gameState.inventory.equipment.length < 7) {
             return this.equip(backpackIndex);
         }
@@ -88,14 +89,26 @@ class InventorySystem {
         if (!config) return null;
 
         if (!this.spendGold(config.price)) return null;
-        if (gameState.inventory.items.length >= 10) {
+
+        const eq = createEquipment(id);
+        if (!eq) {
             this.addGold(config.price);
             return null;
         }
 
-        const eq = createEquipment(id);
-        gameState.inventory.items.push(eq);
-        this.log(`[购买] 买了 ${eq.name}，花费 ${config.price}G`);
+        // 优先装备到空槽位
+        if (gameState.inventory.equipment.length < 7) {
+            gameState.inventory.equipment.push(eq);
+            this.log(`[购买] 购买了 ${eq.name} 并已装备，花费 ${config.price}G`);
+        } else if (gameState.inventory.items.length < 10) {
+            gameState.inventory.items.push(eq);
+            this.log(`[购买] 买了 ${eq.name}，花费 ${config.price}G（已放入背包）`);
+        } else {
+            this.addGold(config.price);
+            this.log('[购买] 装备栏和背包已满');
+            return null;
+        }
+
         return eq;
     }
 

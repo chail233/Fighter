@@ -28,6 +28,11 @@ export class MenuScene extends Phaser.Scene {
             this.pageContainer[this.currentPage].setVisible(false);
             this.currentPage = page;
             this.pageContainer[page].setVisible(true);
+
+            // 切到装备页时刷新显示
+            if (page === 0) this.pages[0].refresh();
+            // 切到商店页时刷新金币
+            if (page === 1) this.pages[1].refresh();
         });
     }
 }
