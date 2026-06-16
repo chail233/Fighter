@@ -1,5 +1,4 @@
-import gameState from '../GameState.js';
-import { createEquipment } from '../data/equipmentConfig.js';
+import gameManager from '../GameManager.js';
 
 export class BootScene extends Phaser.Scene {
     constructor() {
@@ -12,15 +11,7 @@ export class BootScene extends Phaser.Scene {
     }
 
     create() {
-        // 给双方各配一把初始机枪
-        const playerGun = createEquipment('gun');
-        const enemyGun = createEquipment('gun');
-        gameState.inventory.equipment.push(playerGun);
-        gameState.enemy.equipment.push(enemyGun);
-
-        // 初始金币用于测试商店
-        gameState.player.gold = 100;
-
+        gameManager.initNewGame();
         this.scene.start('MenuScene');
     }
 }

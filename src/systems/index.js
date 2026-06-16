@@ -1,3 +1,6 @@
 // systems/ - 实现游戏规则
 // 职责：战斗系统、装备系统、掉落系统、Buff系统、存档系统
 // 不应：显示 UI
+
+export { battleSystem } from './BattleSystem.js';
+export { inventorySystem } from './InventorySystem.js';
