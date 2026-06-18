@@ -34,14 +34,16 @@ export class ShopPage {
         // 商店物品格子
         this.shopSlots = [];
 
-        const itemIds = ['gun'];
+        const itemIds = ['97-gun', '89-gun'];
 
-        itemIds.forEach((id) => {
+        itemIds.forEach((id, i) => {
             const config = EQUIPMENT_CONFIGS[id];
             if (!config) return;
 
             const slotSize = 70;
-            const x = (1280 - slotSize) / 2;
+            const gap = 16;
+            const totalW = itemIds.length * slotSize + (itemIds.length - 1) * gap;
+            const x = (1280 - totalW) / 2 + i * (slotSize + gap);
             const y = 140;
 
             const slot = new MenuSlot(scene, x, y, slotSize, () => {
@@ -50,7 +52,7 @@ export class ShopPage {
             }, 0, container, this.tooltip);
 
             // 价格文字（格子下方）
-            const priceText = scene.add.text(640, y + slotSize + 8, `${config.price} G`, {
+            const priceText = scene.add.text(x + slotSize / 2, y + slotSize + 8, `${config.price} G`, {
                 fontSize: '15px', fontFamily: 'Arial', color: '#ffdd44',
             }).setOrigin(0.5);
             container.add(priceText);
@@ -90,7 +92,7 @@ export class ShopPage {
             } else {
                 const config = EQUIPMENT_CONFIGS[id];
                 if (config) {
-                    const displayEq = { name: config.name, description: config.description, value: config.value, cooldown: config.cooldown };
+                    const displayEq = { name: config.name, category: config.category, description: config.description, value: config.value, cooldown: config.cooldown };
                     slot.setEquipment(displayEq);
                 }
                 slot.hitArea.setInteractive({ useHandCursor: true });

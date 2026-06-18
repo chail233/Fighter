@@ -17,6 +17,7 @@ export class Equipment {
     constructor(config) {
         this.id = config.id || '';
         this.name = config.name || '未命名装备';
+        this.category = config.category || '';  // 装备类别
         this.description = config.description || '';
         this.value = config.value || 0;         // 装备数值
         this.cooldown = config.cooldown || 0;   // 总冷却（秒）

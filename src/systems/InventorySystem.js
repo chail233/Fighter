@@ -136,15 +136,16 @@ class InventorySystem {
     // ========== 初始化 ==========
 
     initNewGame() {
-        const playerGun = createEquipment('gun');
-        const enemyGun = createEquipment('gun');
+        const playerGun = createEquipment('97-gun');
+        const enemyGun = createEquipment('97-gun');
         gameState.inventory.equipment.push(playerGun);
         gameState.enemy.equipment.push(enemyGun);
         gameState.player.gold = 100;
 
         // 初始化商店商品
         gameState.shopItems = [
-            { id: 'gun', sold: false },
+            { id: '97-gun', sold: false },
+            { id: '89-gun', sold: false },
         ];
     }
 }

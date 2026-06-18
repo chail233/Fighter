@@ -2,6 +2,8 @@
 // 职责：在鼠标位置显示装备详细信息
 // 不应：修改游戏数据
 
+import { EQUIPMENT_CATEGORIES } from '../data/equipmentConfig.js';
+
 export class Tooltip {
     constructor(scene) {
         this.scene = scene;
@@ -9,6 +11,11 @@ export class Tooltip {
 
         this.bg = scene.add.graphics();
         this.container.add(this.bg);
+
+        this.categoryText = scene.add.text(0, 0, '', {
+            fontSize: '12px', fontFamily: 'Arial', color: '#ffffff',
+        });
+        this.container.add(this.categoryText);
 
         this.nameText = scene.add.text(0, 0, '', {
             fontSize: '16px', fontFamily: 'Arial', color: '#ffdd44',
@@ -34,8 +41,18 @@ export class Tooltip {
         }
 
         const pad = 14;
-        const gap = 8;
+        const gap = 6;
         let cy = pad;
+
+        // 类别标签
+        const catKey = equipment.category || '';
+        const cat = EQUIPMENT_CATEGORIES[catKey];
+        if (cat) {
+            this.categoryText.setText(`[${cat.name}]`);
+            this.categoryText.setColor(cat.color);
+            this.categoryText.setPosition(pad, cy);
+            cy += 20;
+        }
 
         this.nameText.setText(equipment.name || '');
         this.nameText.setPosition(pad, cy);
