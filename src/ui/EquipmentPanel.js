@@ -11,23 +11,20 @@ export class EquipmentPanel {
      * @param {number} x - 左上角 x
      * @param {number} y - 左上角 y
      * @param {number} slotSize - 每个格子的大小
+     * @param {Tooltip} [tooltip] - 共享的提示框实例
      */
-    constructor(scene, x, y, slotSize = 50) {
+    constructor(scene, x, y, slotSize = 50, tooltip) {
         this.scene = scene;
         this.slots = [];
 
         const gap = 6;
         for (let i = 0; i < EQUIPMENT_SLOTS; i++) {
             const slotX = x + i * (slotSize + gap);
-            const slot = new EquipmentSlot(scene, slotX, y, slotSize);
+            const slot = new EquipmentSlot(scene, slotX, y, slotSize, tooltip);
             this.slots.push(slot);
         }
     }
 
-    /**
-     * 将装备列表绑定到槽位
-     * @param {Equipment[]} equipmentList
-     */
     bindEquipment(equipmentList) {
         for (let i = 0; i < this.slots.length; i++) {
             const eq = i < equipmentList.length ? equipmentList[i] : null;

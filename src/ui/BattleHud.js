@@ -4,6 +4,7 @@
 
 import { HpBar } from './HpBar.js';
 import { EquipmentPanel } from './EquipmentPanel.js';
+import { Tooltip } from './Tooltip.js';
 
 export class BattleHud {
     /**
@@ -11,13 +12,14 @@ export class BattleHud {
      */
     constructor(scene) {
         this.scene = scene;
+        this.tooltip = new Tooltip(scene);
 
         // 玩家 HUD（正下方居中）
-        this.playerEquipPanel = new EquipmentPanel(scene, 465, 640, 44);
+        this.playerEquipPanel = new EquipmentPanel(scene, 465, 640, 44, this.tooltip);
         this.playerHpBar = new HpBar(scene, 490, 690, 300, 22, 100);
 
         // 敌人 HUD（正上方居中）
-        this.enemyEquipPanel = new EquipmentPanel(scene, 465, 12, 44);
+        this.enemyEquipPanel = new EquipmentPanel(scene, 465, 12, 44, this.tooltip);
         this.enemyHpBar = new HpBar(scene, 490, 62, 300, 22, 100);
     }
 
@@ -57,5 +59,6 @@ export class BattleHud {
         this.playerEquipPanel.destroy();
         this.enemyHpBar.destroy();
         this.enemyEquipPanel.destroy();
+        this.tooltip.destroy();
     }
 }
