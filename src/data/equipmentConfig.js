@@ -47,4 +47,24 @@ export const EQUIPMENT_CONFIGS = {
             gm.dealDamage(eq.value, target, target.name, eq.name);
         },
     },
+    '3year-gun': {
+        id: '3year-gun',
+        name: '三年式机枪',
+        category: 'weapon',
+        description: '大口径机枪，每次攻击使其他武器类别的装备迟滞0.5s',
+        value: 40,
+        price: 80,
+        cooldown: 3.5,
+        effect: (owner, target, gm, eq) => {
+            gm.dealDamage(eq.value, target, target.name, eq.name);
+            // 迟滞其他武器类别的装备（通过 owner.equipment 获取装备列表）
+            const list = owner.equipment || [];
+            for (const other of list) {
+                if (other === eq || other.category !== 'weapon') continue;
+                if (other.cooldownTimer > 0) {
+                    other.cooldownTimer = Math.min(other.cooldownTimer + 0.5, other.cooldown);
+                }
+            }
+        },
+    },
 };

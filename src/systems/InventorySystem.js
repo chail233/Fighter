@@ -146,6 +146,7 @@ class InventorySystem {
         gameState.shopItems = [
             { id: '97-gun', sold: false },
             { id: '89-gun', sold: false },
+            { id: '3year-gun', sold: false },
         ];
     }
 }

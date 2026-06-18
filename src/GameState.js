@@ -16,8 +16,8 @@ class GameState {
             name: '玩家',
             texture: 'Ki-61',
             level: 1,
-            hp: 100,
-            maxHp: 100,
+            hp: 500,
+            maxHp: 500,
             defense: 0,
             gold: 0,
         };
@@ -33,8 +33,8 @@ class GameState {
             name: '敌人',
             texture: 'N1K-J',
             level: 1,
-            hp: 50,
-            maxHp: 50,
+            hp: 500,
+            maxHp: 500,
             defense: 0,
             equipment: [],     // 敌人装备（最多 EQUIPMENT_SLOTS）
         };
@@ -53,8 +53,8 @@ class GameState {
             name: '玩家',
             texture: 'Ki-61',
             level: 1,
-            hp: 100,
-            maxHp: 100,
+            hp: 500,
+            maxHp: 500,
             defense: 0,
             gold: 0,
         };
@@ -64,8 +64,8 @@ class GameState {
             name: '敌人',
             texture: 'N1K-J',
             level: 1,
-            hp: 50,
-            maxHp: 50,
+            hp: 500,
+            maxHp: 500,
             defense: 0,
             equipment: [],
         };

@@ -56,17 +56,20 @@ class BattleSystem {
      * 主循环：更新双方装备 CD，自动触发就绪装备
      */
     update(delta) {
+        // 玩家：附带 equipment 引用，供 effect 函数访问同队装备
+        const playerWithEquip = { ...gameState.player, equipment: gameState.inventory.equipment };
         for (const eq of gameState.inventory.equipment) {
-            eq.update(delta, gameState.player);
+            eq.update(delta, playerWithEquip);
             if (eq.isReady) {
-                this.useEquipment(eq, gameState.player, gameState.enemy);
+                this.useEquipment(eq, playerWithEquip, gameState.enemy);
             }
         }
 
+        const enemyWithEquip = { ...gameState.enemy, equipment: gameState.enemy.equipment };
         for (const eq of gameState.enemy.equipment) {
-            eq.update(delta, gameState.enemy);
+            eq.update(delta, enemyWithEquip);
             if (eq.isReady) {
-                this.useEquipment(eq, gameState.enemy, gameState.player);
+                this.useEquipment(eq, enemyWithEquip, gameState.player);
             }
         }
     }
