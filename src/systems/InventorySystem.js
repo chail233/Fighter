@@ -88,6 +88,10 @@ class InventorySystem {
         const config = EQUIPMENT_CONFIGS[id];
         if (!config) return null;
 
+        // 检查是否已售罄
+        const shopItem = gameState.shopItems.find(s => s.id === id);
+        if (!shopItem || shopItem.sold) return null;
+
         if (!this.spendGold(config.price)) return null;
 
         const eq = createEquipment(id);
@@ -95,6 +99,9 @@ class InventorySystem {
             this.addGold(config.price);
             return null;
         }
+
+        // 标记已售
+        shopItem.sold = true;
 
         // 优先装备到空槽位
         if (gameState.inventory.equipment.length < 7) {
@@ -105,6 +112,7 @@ class InventorySystem {
             this.log(`[购买] 买了 ${eq.name}，花费 ${config.price}G（已放入背包）`);
         } else {
             this.addGold(config.price);
+            shopItem.sold = false;  // 没买成，恢复可售
             this.log('[购买] 装备栏和背包已满');
             return null;
         }
@@ -133,6 +141,11 @@ class InventorySystem {
         gameState.inventory.equipment.push(playerGun);
         gameState.enemy.equipment.push(enemyGun);
         gameState.player.gold = 100;
+
+        // 初始化商店商品
+        gameState.shopItems = [
+            { id: 'gun', sold: false },
+        ];
     }
 }
 

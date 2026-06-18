@@ -27,6 +27,8 @@ class GameState {
             items: [],         // 背包道具（最多 BACKPACK_LIMIT）
         };
 
+        this.shopItems = [];   // 商店商品列表，每个 { id, sold }
+
         this.enemy = {
             name: '敌人',
             texture: 'N1K-J',
@@ -57,6 +59,7 @@ class GameState {
             gold: 0,
         };
         this.inventory = { equipment: [], items: [] };
+        this.shopItems = [];
         this.enemy = {
             name: '敌人',
             texture: 'N1K-J',

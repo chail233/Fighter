@@ -21,35 +21,47 @@ export class ShopPage {
         }).setOrigin(0.5);
         container.add(this.goldText);
 
-        // 购买区 - 机枪
-        const y = 140;
-        const bg = scene.add.graphics();
-        bg.fillStyle(0x222244, 0.8);
-        bg.fillRoundedRect(340, y, 600, 80, 8);
-        container.add(bg);
+        // 商店物品列表
+        const items = [
+            { id: 'gun', name: '机枪', price: 50, desc: '快速射击，强度递增' },
+        ];
 
-        const nameText = scene.add.text(360, y + 10, '机枪', {
-            fontSize: '18px', fontFamily: 'Arial', color: '#ffffff',
+        this.shopItemObjects = [];
+
+        items.forEach((item, i) => {
+            const y = 140 + i * 110;
+            const bg = scene.add.graphics();
+            bg.fillStyle(0x222244, 0.8);
+            bg.fillRoundedRect(200, y, 880, 90, 8);
+            container.add(bg);
+
+            const nameText = scene.add.text(220, y + 10, item.name, {
+                fontSize: '20px', fontFamily: 'Arial', color: '#ffffff',
+            });
+            container.add(nameText);
+
+            const descText = scene.add.text(220, y + 42, item.desc, {
+                fontSize: '14px', fontFamily: 'Arial', color: '#aaaaaa',
+            });
+            container.add(descText);
+
+            // 状态文字（左侧显示已售 / 价格）
+            const statusText = scene.add.text(720, y + 28, '', {
+                fontSize: '18px', fontFamily: 'Arial', color: '#888888',
+            });
+            container.add(statusText);
+
+            // 购买按钮（最右）
+            const buyBtn = new MenuButton(scene, 920, y + 30, 130, 40, '购买', () => {
+                gameManager.buyEquipment(item.id);
+                this.refresh();
+            }, {}, container);
+
+            this.shopItemObjects.push({ bg, nameText, descText, statusText, buyBtn, id: item.id, price: item.price });
         });
-        container.add(nameText);
-
-        const descText = scene.add.text(360, y + 40, '快速射击，强度递增', {
-            fontSize: '13px', fontFamily: 'Arial', color: '#aaaaaa',
-        });
-        container.add(descText);
-
-        const priceText = scene.add.text(740, y + 20, '50 G', {
-            fontSize: '16px', fontFamily: 'Arial', color: '#ffdd44',
-        });
-        container.add(priceText);
-
-        new MenuButton(scene, 820, y + 20, 100, 40, '购买', () => {
-            gameManager.buyEquipment('gun');
-            this.refresh();
-        }, {}, container);
 
         // 出售提示
-        const sellLabel = scene.add.text(640, 420, '出售装备（点击背包中的装备出售）', {
+        const sellLabel = scene.add.text(640, 430, '出售装备（点击背包中的装备出售）', {
             fontSize: '16px', fontFamily: 'Arial', color: '#aaaaaa',
         }).setOrigin(0.5);
         container.add(sellLabel);
@@ -60,6 +72,38 @@ export class ShopPage {
     refresh() {
         if (this.goldText) {
             this.goldText.setText(`金币: ${gameState.player.gold}`);
+        }
+
+        // 刷新商品显示状态
+        for (const obj of this.shopItemObjects) {
+            const shopItem = gameState.shopItems.find(s => s.id === obj.id);
+            const sold = shopItem ? shopItem.sold : true;
+
+            if (sold) {
+                obj.statusText.setText('已售罄');
+                obj.statusText.setColor('#888888');
+                obj.buyBtn.hitArea.disableInteractive();
+                obj.buyBtn.label.setColor('#666666');
+                obj.buyBtn.bg.clear();
+                obj.buyBtn.bg.fillStyle(0x333333, 1);
+                obj.buyBtn.bg.fillRoundedRect(
+                    obj.buyBtn.hitArea.x - 65,
+                    obj.buyBtn.hitArea.y - 20,
+                    130, 40, 8
+                );
+            } else {
+                obj.statusText.setText(`${obj.price} G`);
+                obj.statusText.setColor('#ffdd44');
+                obj.buyBtn.hitArea.setInteractive({ useHandCursor: true });
+                obj.buyBtn.label.setColor('#ffffff');
+                obj.buyBtn.bg.clear();
+                obj.buyBtn.bg.fillStyle(0x334488, 1);
+                obj.buyBtn.bg.fillRoundedRect(
+                    obj.buyBtn.hitArea.x - 65,
+                    obj.buyBtn.hitArea.y - 20,
+                    130, 40, 8
+                );
+            }
         }
     }
 }
