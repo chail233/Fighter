@@ -6,11 +6,14 @@ import gameState from '../GameState.js';
 import gameManager from '../GameManager.js';
 import { MenuButton } from './MenuButton.js';
 import { MenuSlot } from './MenuSlot.js';
+import { Tooltip } from './Tooltip.js';
+import { EQUIPMENT_CONFIGS } from '../data/equipmentConfig.js';
 
 export class ShopPage {
     constructor(scene, container) {
         this.scene = scene;
         this.container = container;
+        this.tooltip = new Tooltip(scene);
 
         const title = scene.add.text(640, 30, '商店', {
             fontSize: '28px', fontFamily: 'Arial', color: '#ffffff',
@@ -22,46 +25,42 @@ export class ShopPage {
         }).setOrigin(0.5);
         container.add(this.goldText);
 
-        // 商店物品列表
-        const items = [
-            { id: 'gun', name: '机枪', price: 50, desc: '快速射击，强度递增' },
-        ];
+        // 购买区标题
+        const buyTitle = scene.add.text(640, 110, '购买装备', {
+            fontSize: '16px', fontFamily: 'Arial', color: '#aaaaaa',
+        }).setOrigin(0.5);
+        container.add(buyTitle);
 
-        this.shopItemObjects = [];
+        // 商店物品格子
+        this.shopSlots = [];
 
-        items.forEach((item, i) => {
-            const y = 140 + i * 110;
-            const bg = scene.add.graphics();
-            bg.fillStyle(0x222244, 0.8);
-            bg.fillRoundedRect(200, y, 880, 90, 8);
-            container.add(bg);
+        const itemIds = ['gun'];
 
-            const nameText = scene.add.text(220, y + 10, item.name, {
-                fontSize: '20px', fontFamily: 'Arial', color: '#ffffff',
-            });
-            container.add(nameText);
+        itemIds.forEach((id) => {
+            const config = EQUIPMENT_CONFIGS[id];
+            if (!config) return;
 
-            const descText = scene.add.text(220, y + 42, item.desc, {
-                fontSize: '14px', fontFamily: 'Arial', color: '#aaaaaa',
-            });
-            container.add(descText);
+            const slotSize = 70;
+            const x = (1280 - slotSize) / 2;
+            const y = 140;
 
-            const statusText = scene.add.text(720, y + 28, '', {
-                fontSize: '18px', fontFamily: 'Arial', color: '#888888',
-            });
-            container.add(statusText);
-
-            const buyBtn = new MenuButton(scene, 920, y + 30, 130, 40, '购买', () => {
-                gameManager.buyEquipment(item.id);
+            const slot = new MenuSlot(scene, x, y, slotSize, () => {
+                gameManager.buyEquipment(id);
                 this.refresh();
-            }, {}, container);
+            }, 0, container, this.tooltip);
 
-            this.shopItemObjects.push({ bg, nameText, descText, statusText, buyBtn, id: item.id, price: item.price });
+            // 价格文字（格子下方）
+            const priceText = scene.add.text(640, y + slotSize + 8, `${config.price} G`, {
+                fontSize: '15px', fontFamily: 'Arial', color: '#ffdd44',
+            }).setOrigin(0.5);
+            container.add(priceText);
+
+            this.shopSlots.push({ slot, id, price: config.price, priceText });
         });
 
         // 出售区标题
-        const sellTitle = scene.add.text(640, 360, '出售装备', {
-            fontSize: '20px', fontFamily: 'Arial', color: '#ffffff',
+        const sellTitle = scene.add.text(640, 280, '出售装备', {
+            fontSize: '16px', fontFamily: 'Arial', color: '#aaaaaa',
         }).setOrigin(0.5);
         container.add(sellTitle);
 
@@ -71,39 +70,31 @@ export class ShopPage {
     }
 
     refresh() {
+        this.tooltip.hide();
+
         if (this.goldText) {
             this.goldText.setText(`金币: ${gameState.player.gold}`);
         }
 
-        // 刷新商品显示状态
-        for (const obj of this.shopItemObjects) {
-            const shopItem = gameState.shopItems.find(s => s.id === obj.id);
+        // 刷新购买区商品状态
+        for (const { slot, id, priceText } of this.shopSlots) {
+            const shopItem = gameState.shopItems.find(s => s.id === id);
             const sold = shopItem ? shopItem.sold : true;
 
             if (sold) {
-                obj.statusText.setText('已售罄');
-                obj.statusText.setColor('#888888');
-                obj.buyBtn.hitArea.disableInteractive();
-                obj.buyBtn.label.setColor('#666666');
-                obj.buyBtn.bg.clear();
-                obj.buyBtn.bg.fillStyle(0x333333, 1);
-                obj.buyBtn.bg.fillRoundedRect(
-                    obj.buyBtn.hitArea.x - 65,
-                    obj.buyBtn.hitArea.y - 20,
-                    130, 40, 8
-                );
+                slot.setEquipment(null);
+                slot.label.setText('已售罄');
+                slot.label.setColor('#888888');
+                slot.hitArea.disableInteractive();
+                priceText.setVisible(false);
             } else {
-                obj.statusText.setText(`${obj.price} G`);
-                obj.statusText.setColor('#ffdd44');
-                obj.buyBtn.hitArea.setInteractive({ useHandCursor: true });
-                obj.buyBtn.label.setColor('#ffffff');
-                obj.buyBtn.bg.clear();
-                obj.buyBtn.bg.fillStyle(0x334488, 1);
-                obj.buyBtn.bg.fillRoundedRect(
-                    obj.buyBtn.hitArea.x - 65,
-                    obj.buyBtn.hitArea.y - 20,
-                    130, 40, 8
-                );
+                const config = EQUIPMENT_CONFIGS[id];
+                if (config) {
+                    const displayEq = { name: config.name, description: config.description, value: config.value, cooldown: config.cooldown };
+                    slot.setEquipment(displayEq);
+                }
+                slot.hitArea.setInteractive({ useHandCursor: true });
+                priceText.setVisible(true);
             }
         }
 
@@ -123,10 +114,10 @@ export class ShopPage {
 
         for (let i = 0; i < count; i++) {
             const x = startX + i * (slotSize + gap);
-            const slot = new MenuSlot(this.scene, x, 390, slotSize, (idx) => {
+            const slot = new MenuSlot(this.scene, x, 310, slotSize, (idx) => {
                 gameManager.sellEquipment(idx);
                 this.refresh();
-            }, i, this.container);
+            }, i, this.container, this.tooltip);
             slot.setEquipment(gameState.inventory.items[i]);
             this.sellSlots.push(slot);
         }

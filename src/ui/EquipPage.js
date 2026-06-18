@@ -5,11 +5,13 @@
 import gameState, { EQUIPMENT_SLOTS } from '../GameState.js';
 import gameManager from '../GameManager.js';
 import { MenuSlot } from './MenuSlot.js';
+import { Tooltip } from './Tooltip.js';
 
 export class EquipPage {
     constructor(scene, container) {
         this.scene = scene;
         this.container = container;
+        this.tooltip = new Tooltip(scene);
 
         const title = scene.add.text(640, 30, '装备管理', {
             fontSize: '28px', fontFamily: 'Arial', color: '#ffffff',
@@ -32,7 +34,7 @@ export class EquipPage {
             const slot = new MenuSlot(scene, x, 110, slotSize, (idx) => {
                 gameManager.handleEquipSlotClick(idx);
                 this.refresh();
-            }, i, container);
+            }, i, container, this.tooltip);
             this.equipSlots.push(slot);
         }
 
@@ -51,6 +53,7 @@ export class EquipPage {
     }
 
     refresh() {
+        this.tooltip.hide();
         for (let i = 0; i < this.equipSlots.length; i++) {
             const eq = i < gameState.inventory.equipment.length ? gameState.inventory.equipment[i] : null;
             this.equipSlots[i].setEquipment(eq);
@@ -74,7 +77,7 @@ export class EquipPage {
             const slot = new MenuSlot(this.scene, x, 240, slotSize, (idx) => {
                 gameManager.handleBackpackClick(idx);
                 this.refresh();
-            }, i, this.container);
+            }, i, this.container, this.tooltip);
             slot.setEquipment(gameState.inventory.items[i]);
             this.backpackSlots.push(slot);
         }

@@ -1,6 +1,8 @@
 // MenuSlot - 菜单中的装备槽组件
-// 职责：显示一个可点击的格子（装备/背包），展示装备名或"空"
-// 不应：包含业务逻辑
+// 职责：显示一个可点击的格子（装备/背包），展示装备名或"空"，悬停显示信息
+// 不应：修改游戏数据
+
+import { Tooltip } from './Tooltip.js';
 
 export class MenuSlot {
     /**
@@ -11,13 +13,15 @@ export class MenuSlot {
      * @param {(index: number) => void} onClick - 点击回调
      * @param {number} [index] - 槽位索引
      * @param {Phaser.GameObjects.Container} [container] - 可选，添加到指定容器
+     * @param {Tooltip} [tooltip] - 可选，共享的提示框实例
      */
-    constructor(scene, x, y, size, onClick, index = 0, container) {
+    constructor(scene, x, y, size, onClick, index = 0, container, tooltip) {
         this.scene = scene;
         this.x = x;
         this.y = y;
         this.size = size;
         this.index = index;
+        this.tooltip = tooltip;
 
         const add = (obj) => { if (container) container.add(obj); };
 
@@ -35,12 +39,18 @@ export class MenuSlot {
         }).setOrigin(0.5);
         add(this.label);
 
+        // 高亮（悬停时）
+        this.highlight = scene.add.graphics();
+        add(this.highlight);
+
         // 点击区域
         this.hitArea = scene.add.rectangle(x + size / 2, y + size / 2, size, size)
             .setInteractive({ useHandCursor: true });
         add(this.hitArea);
         this.hitArea.setAlpha(0.001);
         this.hitArea.on('pointerdown', () => onClick(this.index));
+        this.hitArea.on('pointerover', () => this.onHover());
+        this.hitArea.on('pointerout', () => this.onOut());
 
         this.equipment = null;
     }
@@ -56,9 +66,31 @@ export class MenuSlot {
         }
     }
 
+    onHover() {
+        // 显示高亮边框
+        this.highlight.clear();
+        this.highlight.lineStyle(2, 0x6688cc, 0.8);
+        this.highlight.strokeRoundedRect(this.x - 1, this.y - 1, this.size + 2, this.size + 2, 9);
+
+        // 显示提示框
+        if (this.tooltip && this.equipment) {
+            const cx = this.x + this.size / 2;
+            const cy = this.y + this.size / 2;
+            this.tooltip.show(this.equipment, cx, cy);
+        }
+    }
+
+    onOut() {
+        this.highlight.clear();
+        if (this.tooltip) {
+            this.tooltip.hide();
+        }
+    }
+
     destroy() {
         this.bg.destroy();
         this.label.destroy();
         this.hitArea.destroy();
+        this.highlight.destroy();
     }
 }
