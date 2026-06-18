@@ -5,6 +5,7 @@
 import gameState from '../GameState.js';
 import gameManager from '../GameManager.js';
 import { MenuButton } from './MenuButton.js';
+import { MenuSlot } from './MenuSlot.js';
 
 export class ShopPage {
     constructor(scene, container) {
@@ -45,13 +46,11 @@ export class ShopPage {
             });
             container.add(descText);
 
-            // 状态文字（左侧显示已售 / 价格）
             const statusText = scene.add.text(720, y + 28, '', {
                 fontSize: '18px', fontFamily: 'Arial', color: '#888888',
             });
             container.add(statusText);
 
-            // 购买按钮（最右）
             const buyBtn = new MenuButton(scene, 920, y + 30, 130, 40, '购买', () => {
                 gameManager.buyEquipment(item.id);
                 this.refresh();
@@ -60,11 +59,13 @@ export class ShopPage {
             this.shopItemObjects.push({ bg, nameText, descText, statusText, buyBtn, id: item.id, price: item.price });
         });
 
-        // 出售提示
-        const sellLabel = scene.add.text(640, 430, '出售装备（点击背包中的装备出售）', {
-            fontSize: '16px', fontFamily: 'Arial', color: '#aaaaaa',
+        // 出售区标题
+        const sellTitle = scene.add.text(640, 360, '出售装备', {
+            fontSize: '20px', fontFamily: 'Arial', color: '#ffffff',
         }).setOrigin(0.5);
-        container.add(sellLabel);
+        container.add(sellTitle);
+
+        this.sellSlots = [];
 
         this.refresh();
     }
@@ -104,6 +105,30 @@ export class ShopPage {
                     130, 40, 8
                 );
             }
+        }
+
+        // 刷新出售区
+        for (const slot of this.sellSlots) {
+            slot.destroy();
+        }
+        this.sellSlots = [];
+
+        const slotSize = 60;
+        const gap = 8;
+        const count = Math.min(gameState.inventory.items.length, 10);
+        if (count === 0) return;
+
+        const totalWidth = count * slotSize + (count - 1) * gap;
+        const startX = (1280 - totalWidth) / 2;
+
+        for (let i = 0; i < count; i++) {
+            const x = startX + i * (slotSize + gap);
+            const slot = new MenuSlot(this.scene, x, 390, slotSize, (idx) => {
+                gameManager.sellEquipment(idx);
+                this.refresh();
+            }, i, this.container);
+            slot.setEquipment(gameState.inventory.items[i]);
+            this.sellSlots.push(slot);
         }
     }
 }

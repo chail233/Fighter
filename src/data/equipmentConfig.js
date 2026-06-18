@@ -19,7 +19,7 @@ export const EQUIPMENT_CONFIGS = {
     gun: {
         id: 'gun',
         name: '机枪',
-        description: '快速射击，每次造成攻击伤害,并使装备强度加1',
+        description: '快速射击，每次造成攻击伤害,并使伤害加1',
         value: 10,
         price: 50,
         cooldown: 1,
