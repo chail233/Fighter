@@ -33,6 +33,14 @@ class GameManager {
         return battleSystem.useEquipment(equipment, owner, target);
     }
 
+    modifyCooldown(equipment, delta) {
+        return battleSystem.modifyCooldown(equipment, delta);
+    }
+
+    modifyValue(equipment, delta) {
+        return battleSystem.modifyValue(equipment, delta);
+    }
+
     update(delta) {
         battleSystem.update(delta);
     }

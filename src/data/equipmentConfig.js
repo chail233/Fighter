@@ -62,7 +62,7 @@ export const EQUIPMENT_CONFIGS = {
             for (const other of list) {
                 if (other === eq || other.category !== 'weapon') continue;
                 if (other.cooldownTimer > 0) {
-                    other.cooldownTimer = Math.min(other.cooldownTimer + 0.5, other.cooldown);
+                    gm.modifyCooldown(other, 0.5);
                 }
             }
         },

@@ -53,6 +53,22 @@ class BattleSystem {
     }
 
     /**
+     * 修改装备冷却时间（封装，避免直接访问 cooldownTimer）
+     */
+    modifyCooldown(equipment, delta) {
+        if (!equipment) return;
+        equipment.cooldownTimer = Math.max(0, Math.min(equipment.cooldownTimer + delta, equipment.cooldown));
+    }
+
+    /**
+     * 修改装备强度（封装，避免直接访问 value）
+     */
+    modifyValue(equipment, delta) {
+        if (!equipment) return;
+        equipment.value = Math.max(0, equipment.value + delta);
+    }
+
+    /**
      * 主循环：更新双方装备 CD，自动触发就绪装备
      */
     update(delta) {
