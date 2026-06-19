@@ -51,7 +51,7 @@ export const EQUIPMENT_CONFIGS = {
         id: '3year-gun',
         name: '三年式机枪',
         category: 'weapon',
-        description: '大口径机枪，每次攻击使其他武器类别的装备迟滞0.5s',
+        description: '大口径机枪，每次攻击使其他武器类别的装备迟滞0.2s',
         value: 30,
         price: 80,
         cooldown: 4,
@@ -62,7 +62,7 @@ export const EQUIPMENT_CONFIGS = {
             for (const other of list) {
                 if (other === eq || other.category !== 'weapon') continue;
                 if (other.cooldownTimer > 0) {
-                    gm.modifyCooldown(other, 0.5);
+                    gm.modifyCooldown(other, 0.2);
                 }
             }
         },

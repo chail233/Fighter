@@ -140,7 +140,7 @@ class InventorySystem {
         const enemyGun = createEquipment('97-gun');
         gameState.inventory.equipment.push(playerGun);
         gameState.enemy.equipment.push(enemyGun);
-        gameState.player.gold = 100;
+        gameState.player.gold = 114514;
 
         // 初始化商店商品
         gameState.shopItems = [
