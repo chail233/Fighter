@@ -52,7 +52,7 @@ export const EQUIPMENT_CONFIGS = {
         name: '三年式机枪',
         category: 'weapon',
         description: '大口径机枪，每次攻击使其他武器类别的装备迟滞0.5s',
-        value: 35,
+        value: 30,
         price: 80,
         cooldown: 4,
         effect: (owner, target, gm, eq) => {
@@ -72,7 +72,7 @@ export const EQUIPMENT_CONFIGS = {
         name: '一式机枪',
         category: 'weapon',
         description: '其他武器攻击时，本武器加速0.1s',
-        value: 40,
+        value: 20,
         price: 80,
         cooldown: 6,
         effect: (owner, target, gm, eq) => {
