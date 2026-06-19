@@ -15,10 +15,6 @@ class BattleSystem {
 
     /**
      * 造成伤害
-     * @param {number} damage - 原始伤害值
-     * @param {object} defender - 防御者
-     * @param {string} defenderName - 防御者名称
-     * @param {string} sourceName - 伤害来源名称
      */
     dealDamage(damage, defender, defenderName, sourceName) {
         const actual = Math.max(1, damage - defender.defense);
@@ -27,21 +23,20 @@ class BattleSystem {
         return actual;
     }
 
-    /**
-     * 恢复生命
-     * @param {object} target - 目标
-     * @param {number} amount - 恢复量
-     * @param {string} targetName - 目标名称
-     */
-    heal(target, amount, targetName) {
-        const before = target.hp;
-        target.hp = Math.min(target.maxHp, target.hp + amount);
-        const actual = target.hp - before;
-        if (actual > 0) {
-            this.log(`[治疗] ${targetName} 恢复 ${actual} 点生命值`);
+    /** 统一武器攻击入口（箭头函数自动绑定 this） */
+    weaponAttack = (owner, target, weapon) => {
+        this.dealDamage(weapon.value, target, target.name, weapon.name);
+
+        // 全局被动：场上任意武器攻击时，一式机枪加速 0.1s
+        if (weapon.category === 'weapon') {
+            const list = owner.equipment || [];
+            for (const eq of list) {
+                if (eq.id === '1st-gun' && eq.cooldownTimer > 0) {
+                    this.modifyCooldown(eq, -0.1);
+                }
+            }
         }
-        return actual;
-    }
+    };
 
     /**
      * 触发一件装备
@@ -72,7 +67,6 @@ class BattleSystem {
      * 主循环：更新双方装备 CD，自动触发就绪装备
      */
     update(delta) {
-        // 玩家：附带 equipment 引用，供 effect 函数访问同队装备
         const playerWithEquip = { ...gameState.player, equipment: gameState.inventory.equipment };
         for (const eq of gameState.inventory.equipment) {
             eq.update(delta, playerWithEquip);

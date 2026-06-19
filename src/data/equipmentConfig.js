@@ -32,7 +32,7 @@ export const EQUIPMENT_CONFIGS = {
         price: 50,
         cooldown: 2,
         effect: (owner, target, gm, eq) => {
-            gm.dealDamage(eq.value, target, target.name, eq.name);
+            gm.weaponAttack(owner, target, eq);
         },
     },
     '89-gun': {
@@ -44,7 +44,7 @@ export const EQUIPMENT_CONFIGS = {
         price: 50,
         cooldown: 2,
         effect: (owner, target, gm, eq) => {
-            gm.dealDamage(eq.value, target, target.name, eq.name);
+            gm.weaponAttack(owner, target, eq);
         },
     },
     '3year-gun': {
@@ -52,11 +52,11 @@ export const EQUIPMENT_CONFIGS = {
         name: '三年式机枪',
         category: 'weapon',
         description: '大口径机枪，每次攻击使其他武器类别的装备迟滞0.5s',
-        value: 40,
+        value: 35,
         price: 80,
-        cooldown: 3.5,
+        cooldown: 4,
         effect: (owner, target, gm, eq) => {
-            gm.dealDamage(eq.value, target, target.name, eq.name);
+            gm.weaponAttack(owner, target, eq);
             // 迟滞其他武器类别的装备（通过 owner.equipment 获取装备列表）
             const list = owner.equipment || [];
             for (const other of list) {
@@ -65,6 +65,18 @@ export const EQUIPMENT_CONFIGS = {
                     gm.modifyCooldown(other, 0.5);
                 }
             }
+        },
+    },
+    '1st-gun': {
+        id: '1st-gun',
+        name: '一式机枪',
+        category: 'weapon',
+        description: '其他武器攻击时，本武器加速0.1s',
+        value: 40,
+        price: 80,
+        cooldown: 6,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
         },
     },
 };

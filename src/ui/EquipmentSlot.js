@@ -37,6 +37,12 @@ export class EquipmentSlot {
             fontSize: '11px', fontFamily: 'Arial', color: '#666666',
         }).setOrigin(0.5);
 
+        // CD 数字（精确到0.1s，显示在格子外面正上方）
+        this.cdText = scene.add.text(x + size / 2, y - 6, '', {
+            fontSize: '12px', fontFamily: 'Arial', color: '#ffdd44', fontWeight: 'bold',
+        }).setOrigin(0.5);
+        this.cdText.setVisible(false);
+
         // 就绪发光效果
         this.glow = scene.add.graphics();
         this.glow.setVisible(false);
@@ -82,6 +88,7 @@ export class EquipmentSlot {
     update() {
         if (!this.equipment || !this.equipment.cooldown) {
             this.cdOverlay.setVisible(false);
+            this.cdText.setVisible(false);
             this.glow.setVisible(false);
             return;
         }
@@ -90,12 +97,14 @@ export class EquipmentSlot {
 
         if (this.equipment.isReady) {
             this.cdOverlay.setVisible(false);
+            this.cdText.setVisible(false);
             this.glow.setVisible(true);
             this.glow.clear();
             this.glow.lineStyle(2, 0xffdd44, 0.8);
             this.glow.strokeRoundedRect(this.x - 1, this.y - 1, this.size + 2, this.size + 2, 7);
             this.label.setColor('#ffdd44');
         } else {
+            const remaining = this.equipment.cooldownTimer;
             this.glow.setVisible(false);
             this.cdOverlay.setVisible(true);
             this.cdOverlay.clear();
@@ -106,6 +115,11 @@ export class EquipmentSlot {
                 this.size, overlayHeight,
                 { tl: 0, tr: 0, bl: 6, br: 6 }
             );
+
+            // 显示 CD 数字（精确到0.1s，位置固定在格子外面上方）
+            this.cdText.setVisible(true);
+            this.cdText.setText(remaining.toFixed(1));
+            this.cdText.setColor('#ffdd44');
             this.label.setColor('#aaaaaa');
         }
     }
@@ -114,6 +128,7 @@ export class EquipmentSlot {
         this.bg.destroy();
         this.cdOverlay.destroy();
         this.label.destroy();
+        this.cdText.destroy();
         this.glow.destroy();
         this.highlight.destroy();
         this.hitArea.destroy();

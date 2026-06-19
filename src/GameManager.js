@@ -33,6 +33,10 @@ class GameManager {
         return battleSystem.useEquipment(equipment, owner, target);
     }
 
+    weaponAttack(owner, target, weapon) {
+        return battleSystem.weaponAttack(owner, target, weapon);
+    }
+
     modifyCooldown(equipment, delta) {
         return battleSystem.modifyCooldown(equipment, delta);
     }

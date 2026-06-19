@@ -147,6 +147,7 @@ class InventorySystem {
             { id: '97-gun', sold: false },
             { id: '89-gun', sold: false },
             { id: '3year-gun', sold: false },
+            { id: '1st-gun', sold: false },
         ];
     }
 }
