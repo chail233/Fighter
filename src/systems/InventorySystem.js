@@ -154,6 +154,8 @@ class InventorySystem {
             { id: '5-cannon', sold: false },
             { id: '89-revolving-gun', sold: false },
             { id: '92-gun', sold: false },
+            { id: '70mm-rocket', sold: false },
+            { id: '120mm-rocket', sold: false },
         ];
     }
 }

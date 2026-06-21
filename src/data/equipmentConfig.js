@@ -156,4 +156,42 @@ export const EQUIPMENT_CONFIGS = {
             gm.weaponAttack(owner, target, eq);
         },
     },
+    '70mm-rocket': {
+        id: '70mm-rocket',
+        name: '70mm火箭弹',
+        category: 'weapon',
+        description: '攻击时，使敌机所有装备迟滞0.2s',
+        value: 35,
+        price: 220,
+        cooldown: 7,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+            // 迟滞敌人所有装备
+            const list = target.equipment || [];
+            for (const other of list) {
+                if (other.cooldownTimer > 0) {
+                    gm.modifyCooldown(other, 0.2);
+                }
+            }
+        },
+    },
+    '120mm-rocket': {
+        id: '120mm-rocket',
+        name: '120mm火箭弹',
+        category: 'weapon',
+        description: '攻击时，使敌机一件装备迟滞5s',
+        value: 70,
+        price: 400,
+        cooldown: 10,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+            // 随机选一件敌人装备迟滞5s
+            const list = target.equipment || [];
+            const candidates = list.filter(other => other.cooldownTimer > 0);
+            if (candidates.length > 0) {
+                const targetEq = candidates[Math.floor(Math.random() * candidates.length)];
+                gm.modifyCooldown(targetEq, 5);
+            }
+        },
+    },
 };
