@@ -36,15 +36,20 @@ export class ShopPage {
 
         const itemIds = ['97-gun', '89-gun', '3year-gun', '1st-gun', '99-cannon', '99-cannon-2', 'ho-155', '5-cannon', '89-revolving-gun', '92-gun'];
 
+        const cols = 5;  // 每行 5 个
+        const slotSize = 70;
+        const gap = 16;
+        const rowGap = 30;  // 行间距（给价格文字留空间）
+
         itemIds.forEach((id, i) => {
             const config = EQUIPMENT_CONFIGS[id];
             if (!config) return;
 
-            const slotSize = 70;
-            const gap = 16;
-            const totalW = itemIds.length * slotSize + (itemIds.length - 1) * gap;
-            const x = (1280 - totalW) / 2 + i * (slotSize + gap);
-            const y = 140;
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            const totalRowW = cols * slotSize + (cols - 1) * gap;
+            const x = (1280 - totalRowW) / 2 + col * (slotSize + gap);
+            const y = 140 + row * (slotSize + rowGap);
 
             const slot = new MenuSlot(scene, x, y, slotSize, () => {
                 gameManager.buyEquipment(id);

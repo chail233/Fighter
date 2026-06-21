@@ -150,7 +150,7 @@ export const EQUIPMENT_CONFIGS = {
         category: 'weapon',
         description: '己方受到攻击时，强度+5',
         value: 5,
-        price: 100,
+        price: 200,
         cooldown: 2.5,
         effect: (owner, target, gm, eq) => {
             gm.weaponAttack(owner, target, eq);
