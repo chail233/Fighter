@@ -52,7 +52,7 @@ export const EQUIPMENT_CONFIGS = {
         name: '三年式机枪',
         category: 'weapon',
         description: '大口径机枪，每次攻击使其他武器类别的装备迟滞0.2s',
-        value: 30,
+        value: 25,
         price: 80,
         cooldown: 4,
         effect: (owner, target, gm, eq) => {
@@ -75,6 +75,71 @@ export const EQUIPMENT_CONFIGS = {
         value: 20,
         price: 80,
         cooldown: 6,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+        },
+    },
+    '99-cannon': {
+        id: '99-cannon',
+        name: '九九式机炮',
+        category: 'weapon',
+        description: '相邻武器攻击时，本武器强度+10',
+        value: 30,
+        price: 200,
+        cooldown: 8,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+        },
+    },
+    '99-cannon-2': {
+        id: '99-cannon-2',
+        name: '九九式机炮二号',
+        category: 'weapon',
+        description: '相邻武器攻击时，本武器强度翻倍',
+        value: 16,
+        price: 400,
+        cooldown: 8,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+        },
+    },
+    'ho-155': {
+        id: 'ho-155',
+        name: 'ho-155 30mm机炮',
+        category: 'weapon',
+        description: '攻击时，额外造成敌机十分之一生命值的伤害',
+        value: 50,
+        price: 520,
+        cooldown: 12,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+            // 额外造成目标当前生命值 10% 的伤害
+            const bonus = Math.floor(target.hp * 0.1);
+            gm.dealDamage(bonus, target, target.name, eq.name + '(额外)');
+        },
+    },
+    '5-cannon': {
+        id: '5-cannon',
+        name: '五式机炮',
+        category: 'weapon',
+        description: '攻击时，额外造成己方生命值十分之一生命值的伤害',
+        value: 50,
+        price: 520,
+        cooldown: 12,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+            const bonus = Math.floor(owner.hp * 0.1);
+            gm.dealDamage(bonus, target, target.name, eq.name + '(额外)');
+        },
+    },
+    '89-revolving-gun': {
+        id: '89-revolving-gun',
+        name: '八九式回旋机枪',
+        category: 'weapon',
+        description: '己方受到伤害时，立即攻击',
+        value: 5,
+        price: 100,
+        cooldown: 3,
         effect: (owner, target, gm, eq) => {
             gm.weaponAttack(owner, target, eq);
         },

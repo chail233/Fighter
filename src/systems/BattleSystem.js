@@ -20,19 +20,97 @@ class BattleSystem {
         const actual = Math.max(1, damage - defender.defense);
         defender.hp = Math.max(0, defender.hp - actual);
         this.log(`[${sourceName}] 造成 ${actual} 点伤害 → ${defenderName}(${defender.hp}/${defender.maxHp})`);
+
+        // 受击方反击：检查是否有八九式回旋机枪
+        this._triggerCounter(defender);
+
         return actual;
+    }
+
+    /**
+     * 反击攻击入口（与 weaponAttack 类似，但不触发防反被动）
+     */
+    counterAttack(owner, target, weapon) {
+        const actual = Math.max(1, weapon.value - target.defense);
+        target.hp = Math.max(0, target.hp - actual);
+        this.log(`[${weapon.name}] 反击 ${actual} 点伤害 → ${target.name}(${target.hp}/${target.maxHp})`);
+
+        // 己方被动效果（一式加速、九九式相邻）正常触发
+        if (weapon.category === 'weapon') {
+            const list = owner.equipment || [];
+            for (const eq of list) {
+                if (eq.id === '1st-gun' && eq.cooldownTimer > 0) {
+                    this.modifyCooldown(eq, -0.1);
+                }
+            }
+            const idx = list.indexOf(weapon);
+            if (idx !== -1) {
+                if (idx > 0 && list[idx - 1].id === '99-cannon') {
+                    this.modifyValue(list[idx - 1], 10);
+                }
+                if (idx < list.length - 1 && list[idx + 1].id === '99-cannon') {
+                    this.modifyValue(list[idx + 1], 10);
+                }
+                if (idx > 0 && list[idx - 1].id === '99-cannon-2') {
+                    this.modifyValue(list[idx - 1], list[idx - 1].value);
+                }
+                if (idx < list.length - 1 && list[idx + 1].id === '99-cannon-2') {
+                    this.modifyValue(list[idx + 1], list[idx + 1].value);
+                }
+            }
+        }
+    }
+
+    /**
+     * 受击时触发己方八九式回旋机枪立即反击
+     */
+    _triggerCounter(defender) {
+        let owner, target;
+        // 通过引用比较判断受击方（gameState.player/enemy 直接作为 defender 传入）
+        if (defender === gameState.player) {
+            owner = { ...gameState.player, equipment: gameState.inventory.equipment };
+            target = gameState.enemy;
+        } else {
+            owner = { ...gameState.enemy, equipment: gameState.enemy.equipment };
+            target = gameState.player;
+        }
+
+        const list = owner.equipment || [];
+        for (const eq of list) {
+            if (eq.id === '89-revolving-gun') {
+                this.counterAttack(owner, target, eq);
+            }
+        }
     }
 
     /** 统一武器攻击入口（箭头函数自动绑定 this） */
     weaponAttack = (owner, target, weapon) => {
         this.dealDamage(weapon.value, target, target.name, weapon.name);
 
-        // 全局被动：场上任意武器攻击时，一式机枪加速 0.1s
         if (weapon.category === 'weapon') {
             const list = owner.equipment || [];
+            // 一式机枪加速
             for (const eq of list) {
                 if (eq.id === '1st-gun' && eq.cooldownTimer > 0) {
                     this.modifyCooldown(eq, -0.1);
+                }
+            }
+            // 九九式机炮：相邻武器攻击时强度 +10
+            // 九九式机炮二号：相邻武器攻击时强度翻倍
+            const idx = list.indexOf(weapon);
+            if (idx !== -1) {
+                if (idx > 0 && list[idx - 1].id === '99-cannon') {
+                    this.modifyValue(list[idx - 1], 10);
+                }
+                if (idx < list.length - 1 && list[idx + 1].id === '99-cannon') {
+                    this.modifyValue(list[idx + 1], 10);
+                }
+                // 九九式机炮二号：相邻武器攻击时强度翻倍
+                if (idx > 0 && list[idx - 1].id === '99-cannon-2') {
+                    this.modifyValue(list[idx - 1], list[idx - 1].value);
+                }
+                if (idx < list.length - 1 && list[idx + 1].id === '99-cannon-2') {
+                    this.modifyValue(list[idx + 1], list[idx + 1].value);
                 }
             }
         }
