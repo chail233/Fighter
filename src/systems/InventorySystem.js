@@ -153,6 +153,7 @@ class InventorySystem {
             { id: 'ho-155', sold: false },
             { id: '5-cannon', sold: false },
             { id: '89-revolving-gun', sold: false },
+            { id: '92-gun', sold: false },
         ];
     }
 }

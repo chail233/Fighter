@@ -34,7 +34,7 @@ export class ShopPage {
         // 商店物品格子
         this.shopSlots = [];
 
-        const itemIds = ['97-gun', '89-gun', '3year-gun', '1st-gun', '99-cannon', '99-cannon-2', 'ho-155', '5-cannon', '89-revolving-gun'];
+        const itemIds = ['97-gun', '89-gun', '3year-gun', '1st-gun', '99-cannon', '99-cannon-2', 'ho-155', '5-cannon', '89-revolving-gun', '92-gun'];
 
         itemIds.forEach((id, i) => {
             const config = EQUIPMENT_CONFIGS[id];

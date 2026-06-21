@@ -136,10 +136,22 @@ export const EQUIPMENT_CONFIGS = {
         id: '89-revolving-gun',
         name: '八九式回旋机枪',
         category: 'weapon',
-        description: '己方受到伤害时，立即攻击',
+        description: '己方受到攻击时，立即反击',
         value: 5,
         price: 100,
         cooldown: 3,
+        effect: (owner, target, gm, eq) => {
+            gm.weaponAttack(owner, target, eq);
+        },
+    },
+    '92-gun': {
+        id: '92-gun',
+        name: '九二式机枪',
+        category: 'weapon',
+        description: '己方受到攻击时，强度+5',
+        value: 5,
+        price: 100,
+        cooldown: 2.5,
         effect: (owner, target, gm, eq) => {
             gm.weaponAttack(owner, target, eq);
         },

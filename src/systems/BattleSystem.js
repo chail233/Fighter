@@ -80,6 +80,10 @@ class BattleSystem {
             if (eq.id === '89-revolving-gun') {
                 this.counterAttack(owner, target, eq);
             }
+            if (eq.id === '92-gun') {
+                this.modifyValue(eq, 5);
+                this.log(`[九二式机枪] 强度 +5（当前 ${eq.value}）`);
+            }
         }
     }
 
