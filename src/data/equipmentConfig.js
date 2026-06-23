@@ -148,7 +148,7 @@ export const EQUIPMENT_CONFIGS = {
         id: '92-gun',
         name: '九二式机枪',
         category: 'weapon',
-        description: '己方受到攻击时，强度+5',
+        description: '己方受到攻击时，强度+2',
         value: 5,
         price: 200,
         cooldown: 2.5,

@@ -81,8 +81,8 @@ class BattleSystem {
                 this.counterAttack(owner, target, eq);
             }
             if (eq.id === '92-gun') {
-                this.modifyValue(eq, 5);
-                this.log(`[九二式机枪] 强度 +5（当前 ${eq.value}）`);
+                this.modifyValue(eq, 2);
+                this.log(`[九二式机枪] 强度 +2（当前 ${eq.value}）`);
             }
         }
     }
