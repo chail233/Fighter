@@ -3,7 +3,7 @@
 // 不应：UI 显示
 
 import gameState from '../GameState.js';
-import { createEquipment } from '../data/equipmentConfig.js';
+import { createEquipment, EQUIPMENT_CONFIGS } from '../data/equipmentConfig.js';
 import { getStageById } from '../data/stageConfig.js';
 
 class StageLoader {
@@ -38,7 +38,25 @@ class StageLoader {
         // 更新进度（保证 currentStage 与加载的一致）
         gameState.progress.currentStage = stageId;
 
+        // 随机刷新商店：从全量装备池取 3 件
+        this._refreshShop(3);
+
         return true;
+    }
+
+    /**
+     * 随机刷新商店商品
+     * @param {number} count - 商品数量
+     */
+    _refreshShop(count) {
+        const allIds = Object.keys(EQUIPMENT_CONFIGS);
+        // Fisher-Yates 洗牌取前 count 个
+        const shuffled = [...allIds];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        gameState.shopItems = shuffled.slice(0, count).map(id => ({ id, sold: false }));
     }
 
     /**

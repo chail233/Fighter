@@ -142,21 +142,8 @@ class InventorySystem {
         gameState.enemy.equipment.push(enemyGun);
         gameState.player.gold = 114514;
 
-        // 初始化商店商品
-        gameState.shopItems = [
-            { id: '97-gun', sold: false },
-            { id: '89-gun', sold: false },
-            { id: '3year-gun', sold: false },
-            { id: '1st-gun', sold: false },
-            { id: '99-cannon', sold: false },
-            { id: '99-cannon-2', sold: false },
-            { id: 'ho-155', sold: false },
-            { id: '5-cannon', sold: false },
-            { id: '89-revolving-gun', sold: false },
-            { id: '92-gun', sold: false },
-            { id: '70mm-rocket', sold: false },
-            { id: '120mm-rocket', sold: false },
-        ];
+        // 商店由 StageLoader.loadStage 按关卡随机生成
+        gameState.shopItems = [];
     }
 }
 
