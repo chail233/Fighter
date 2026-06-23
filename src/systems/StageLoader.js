@@ -16,12 +16,13 @@ class StageLoader {
         const config = getStageById(stageId);
         if (!config) return false;
 
-        // 深拷贝节点列表，battle 节点中的 equipment ID 转 Equipment 实例
+        // 深拷贝节点列表，battle 节点保存原始 ID + 首次创建 Equipment 实例
         const nodes = config.nodes.map(node => {
             const n = { ...node };
             if (n.type === 'battle') {
-                // 敌人装备：ID → Equipment 实例
-                const eqInstances = (n.enemy.equipment || []).map(id => createEquipment(id)).filter(Boolean);
+                // 保存原始装备 ID 数组，用于每次 prepareBattle 时重建
+                n._equipmentIds = [...(n.enemy.equipment || [])];
+                const eqInstances = n._equipmentIds.map(id => createEquipment(id)).filter(Boolean);
                 n.enemy = { ...n.enemy, equipment: eqInstances };
                 n.rewards = { ...n.rewards };
             }
@@ -100,14 +101,14 @@ class StageLoader {
         const backpackIds = gameState.inventory.items.map(eq => eq.id);
         gameState.inventory.items = backpackIds.map(id => createEquipment(id)).filter(Boolean);
 
-        // 拷贝敌人数据到 gameState.enemy
+        // 从节点原始 ID 重建敌人装备（避免上一场战斗累积的数据残留）
         const { enemy } = node;
         gameState.enemy.name = enemy.name;
         gameState.enemy.texture = enemy.texture;
         gameState.enemy.hp = enemy.hp;
         gameState.enemy.maxHp = enemy.maxHp;
         gameState.enemy.defense = enemy.defense;
-        gameState.enemy.equipment = enemy.equipment;
+        gameState.enemy.equipment = (node._equipmentIds || []).map(id => createEquipment(id)).filter(Boolean);
 
         return true;
     }
@@ -154,6 +155,9 @@ class StageLoader {
 
         const backpackIds = gameState.inventory.items.map(eq => eq.id);
         gameState.inventory.items = backpackIds.map(id => createEquipment(id)).filter(Boolean);
+
+        const enemyEqIds = gameState.enemy.equipment.map(eq => eq.id);
+        gameState.enemy.equipment = enemyEqIds.map(id => createEquipment(id)).filter(Boolean);
     }
 
     /**
