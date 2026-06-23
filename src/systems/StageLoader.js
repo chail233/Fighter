@@ -75,6 +75,13 @@ class StageLoader {
         // 回满玩家血量
         gameState.player.hp = gameState.player.maxHp;
 
+        // 重置所有玩家装备（从 ID 重建，清除上个战斗累积的 value/cooldownTimer）
+        const playerEqIds = gameState.inventory.equipment.map(eq => eq.id);
+        gameState.inventory.equipment = playerEqIds.map(id => createEquipment(id)).filter(Boolean);
+
+        const backpackIds = gameState.inventory.items.map(eq => eq.id);
+        gameState.inventory.items = backpackIds.map(id => createEquipment(id)).filter(Boolean);
+
         // 拷贝敌人数据到 gameState.enemy
         const { enemy } = node;
         gameState.enemy.name = enemy.name;
@@ -118,6 +125,17 @@ class StageLoader {
         }
 
         return { gold: rewards.gold || 0, items: droppedItems };
+    }
+
+    /**
+     * 重置所有玩家装备为初始状态（从 ID 重建，清除战斗累积数据）
+     */
+    resetEquipment() {
+        const playerEqIds = gameState.inventory.equipment.map(eq => eq.id);
+        gameState.inventory.equipment = playerEqIds.map(id => createEquipment(id)).filter(Boolean);
+
+        const backpackIds = gameState.inventory.items.map(eq => eq.id);
+        gameState.inventory.items = backpackIds.map(id => createEquipment(id)).filter(Boolean);
     }
 
     /**

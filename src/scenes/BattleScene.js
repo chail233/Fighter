@@ -104,6 +104,7 @@ export class BattleScene extends Phaser.Scene {
         btn.on('pointerover', () => btn.setColor('#ffffff'));
         btn.on('pointerout', () => btn.setColor('#88aaff'));
         btn.on('pointerdown', () => {
+            gameManager.resetEquipment();
             this.scene.start('MenuScene');
         });
     }
@@ -128,6 +129,7 @@ export class BattleScene extends Phaser.Scene {
         btn.on('pointerover', () => btn.setColor('#ffffff'));
         btn.on('pointerout', () => btn.setColor('#88aaff'));
         btn.on('pointerdown', () => {
+            gameManager.resetEquipment();
             this.scene.start('MenuScene');
         });
     }

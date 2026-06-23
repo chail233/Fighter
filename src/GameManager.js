@@ -122,6 +122,10 @@ class GameManager {
         return stageLoader.isComplete();
     }
 
+    resetEquipment() {
+        stageLoader.resetEquipment();
+    }
+
     // ========== 初始化 ==========
 
     initNewGame() {
