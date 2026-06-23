@@ -4,6 +4,7 @@
 
 import { battleSystem } from './systems/BattleSystem.js';
 import { inventorySystem } from './systems/InventorySystem.js';
+import { stageLoader } from './systems/StageLoader.js';
 
 class GameManager {
     constructor() {
@@ -91,8 +92,41 @@ class GameManager {
         return inventorySystem.sellEquipment(backpackIndex);
     }
 
+    // ========== 关卡（委托 StageLoader） ==========
+
+    loadStage(stageId) {
+        return stageLoader.loadStage(stageId);
+    }
+
+    getCurrentNode() {
+        return stageLoader.getCurrentNode();
+    }
+
+    advanceNode() {
+        return stageLoader.advance();
+    }
+
+    prepareBattle() {
+        return stageLoader.prepareBattle();
+    }
+
+    collectRewards() {
+        return stageLoader.collectRewards();
+    }
+
+    hasNextNode() {
+        return stageLoader.hasNext();
+    }
+
+    isStageComplete() {
+        return stageLoader.isComplete();
+    }
+
+    // ========== 初始化 ==========
+
     initNewGame() {
         inventorySystem.initNewGame();
+        stageLoader.loadStage(1);
     }
 }
 

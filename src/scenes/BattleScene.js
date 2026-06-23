@@ -50,11 +50,85 @@ export class BattleScene extends Phaser.Scene {
         // 战斗日志（左上角）
         this.combatLog = new CombatLog(this, 10, 90);
         gameManager.bindLog(this.combatLog);
+
+        // 战斗是否已结束
+        this._ended = false;
     }
 
     update(time, delta) {
+        if (this._ended) return;
+
         gameManager.update(delta);
         this.hud.update(gameState.player, gameState.enemy);
         this.combatLog.update();
+
+        // 检查敌人死亡 → 战斗胜利
+        if (gameState.enemy.hp <= 0 && !this._ended) {
+            this._ended = true;
+            this._onVictory();
+        }
+
+        // 检查玩家死亡 → 战斗失败
+        if (gameState.player.hp <= 0 && !this._ended) {
+            this._ended = true;
+            this._onDefeat();
+        }
+    }
+
+    _onVictory() {
+        // 发放奖励 + 推进节点
+        const rewards = gameManager.collectRewards();
+        const rewardStr = rewards.items.length > 0
+            ? `获得 ${rewards.gold} G 和装备 ${rewards.items.join(', ')}`
+            : `获得 ${rewards.gold} G`;
+
+        gameManager.advanceNode();
+
+        // 显示胜利文本 + 返回按钮
+        const overlay = this.add.graphics();
+        overlay.fillStyle(0x000000, 0.6);
+        overlay.fillRect(0, 0, 1280, 720);
+
+        const victoryText = this.add.text(640, 260, '🎉 胜利！', {
+            fontSize: '40px', fontFamily: 'Arial', color: '#ffdd44', fontWeight: 'bold',
+        }).setOrigin(0.5);
+
+        const rewardLabel = this.add.text(640, 330, rewardStr, {
+            fontSize: '20px', fontFamily: 'Arial', color: '#ffffff',
+        }).setOrigin(0.5);
+
+        const btn = this.add.text(640, 420, '[ 返回关卡 ]', {
+            fontSize: '22px', fontFamily: 'Arial', color: '#88aaff',
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+        btn.on('pointerover', () => btn.setColor('#ffffff'));
+        btn.on('pointerout', () => btn.setColor('#88aaff'));
+        btn.on('pointerdown', () => {
+            this.scene.start('MenuScene');
+        });
+    }
+
+    _onDefeat() {
+        const overlay = this.add.graphics();
+        overlay.fillStyle(0x000000, 0.6);
+        overlay.fillRect(0, 0, 1280, 720);
+
+        const defeatText = this.add.text(640, 260, '💥 战败！', {
+            fontSize: '40px', fontFamily: 'Arial', color: '#ff6644', fontWeight: 'bold',
+        }).setOrigin(0.5);
+
+        const tip = this.add.text(640, 330, '调整装备，再试一次', {
+            fontSize: '20px', fontFamily: 'Arial', color: '#aaaaaa',
+        }).setOrigin(0.5);
+
+        const btn = this.add.text(640, 420, '[ 返回关卡 ]', {
+            fontSize: '22px', fontFamily: 'Arial', color: '#88aaff',
+        }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+        btn.on('pointerover', () => btn.setColor('#ffffff'));
+        btn.on('pointerout', () => btn.setColor('#88aaff'));
+        btn.on('pointerdown', () => {
+            this.scene.start('MenuScene');
+        });
     }
 }

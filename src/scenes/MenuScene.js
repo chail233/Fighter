@@ -1,7 +1,7 @@
 import { PageNavigator } from '../ui/PageNavigator.js';
 import { EquipPage } from '../ui/EquipPage.js';
 import { ShopPage } from '../ui/ShopPage.js';
-import { DeployPage } from '../ui/DeployPage.js';
+import { StagePage } from '../ui/StagePage.js';
 
 export class MenuScene extends Phaser.Scene {
     constructor() {
@@ -22,7 +22,7 @@ export class MenuScene extends Phaser.Scene {
 
         this.pages[0] = new EquipPage(this, this.pageContainer[0]);
         this.pages[1] = new ShopPage(this, this.pageContainer[1]);
-        this.pages[2] = new DeployPage(this, this.pageContainer[2]);
+        this.pages[2] = new StagePage(this, this.pageContainer[2]);
 
         this.navigator = new PageNavigator(this, this.totalPages, (page) => {
             this.pageContainer[this.currentPage].setVisible(false);
@@ -33,6 +33,8 @@ export class MenuScene extends Phaser.Scene {
             if (page === 0) this.pages[0].refresh();
             // 切到商店页时刷新金币
             if (page === 1) this.pages[1].refresh();
+            // 切到关卡页时刷新节点
+            if (page === 2) this.pages[2].refresh();
         });
     }
 }
