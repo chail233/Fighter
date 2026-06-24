@@ -1,5 +1,6 @@
 import gameState from '../GameState.js';
 import gameManager from '../GameManager.js';
+import { musicSystem } from '../systems/MusicSystem.js';
 import { BattleHud } from '../ui/BattleHud.js';
 import { CombatLog } from '../ui/CombatLog.js';
 
@@ -53,6 +54,10 @@ export class BattleScene extends Phaser.Scene {
 
         // 战斗是否已结束
         this._ended = false;
+
+        // 播放战斗音乐（随机选一首 Battle0~4）
+        const trackId = `Battle${Phaser.Math.Between(0, 4)}`;
+        musicSystem.play(this, trackId);
     }
 
     update(time, delta) {
