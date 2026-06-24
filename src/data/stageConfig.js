@@ -57,7 +57,7 @@ export const STAGES = [
             {
                 id: '1-1',
                 type: 'story',
-                text: '1937年，华东前线机场。\n\n指挥官："小子，敌人侦察机就在附近，升空拦截！这是你第一次实战，别让中队丢脸。"\n\n地勤人员帮你检查了飞机，一切就绪。你爬进座舱，发动机轰鸣声响起。',
+                eventId: '1-opening',
             },
             {
                 id: '1-2',
@@ -76,7 +76,7 @@ export const STAGES = [
             {
                 id: '1-3',
                 type: 'story',
-                text: '首战告捷！你成功击退了敌侦察机。\n\n指挥官："干得不错，但战争才刚刚开始。回基地休整，后面还有更多敌机等着你。"\n\n解锁装备：八九式机枪',
+                eventId: '1-ending',
             },
         ],
     },
@@ -92,7 +92,7 @@ export const STAGES = [
             {
                 id: '2-1',
                 type: 'story',
-                text: '第二天清晨，警报响起。\n\n指挥官："敌机编队正在接近！全员升空！这次来的可不是侦察机，是正经的战斗机编队。"\n\n你冲向跑道，紧随长机起飞。',
+                eventId: '2-opening',
             },
             {
                 id: '2-2',
@@ -111,7 +111,7 @@ export const STAGES = [
             {
                 id: '2-3',
                 type: 'story',
-                text: '你击落了第一架敌机。但通讯器传来急促的声音：\n\n"发现更多敌机！三点钟方向！"\n\n你猛地拉杆转向，又一场战斗在等着你。',
+                eventId: '2-mid',
             },
             {
                 id: '2-4',
@@ -130,7 +130,7 @@ export const STAGES = [
             {
                 id: '2-5',
                 type: 'story',
-                text: '连续击落两架敌机，你已经证明了自己的实力。\n\n工程师检查了你的战果："敌人的装备越来越好了，我们也得跟上。"\n\n解锁装备：三年式机枪',
+                eventId: '2-ending',
             },
         ],
     },
@@ -146,7 +146,7 @@ export const STAGES = [
             {
                 id: '3-1',
                 type: 'story',
-                text: '前线指挥部。\n\n情报官："根据最新情报，敌军调集了更多兵力，准备对我方机场发动大规模空袭。我们必须提前出击，打乱他们的部署。"',
+                eventId: '3-opening',
             },
             {
                 id: '3-2',
@@ -165,7 +165,7 @@ export const STAGES = [
             {
                 id: '3-3',
                 type: 'story',
-                text: '"打得好！但别放松——王牌来了！"',
+                eventId: '3-mid',
             },
             {
                 id: '3-4',
@@ -184,7 +184,7 @@ export const STAGES = [
             {
                 id: '3-5',
                 type: 'story',
-                text: '王牌飞行员被击落！你获得了他的部分装备。\n\n情报官："干得漂亮！不过敌军正在开发新型武器，我们的情报人员正在调查。"\n\n解锁装备：九九式机炮、九九式机炮二号',
+                eventId: '3-ending',
             },
         ],
     },
@@ -200,7 +200,7 @@ export const STAGES = [
             {
                 id: '4-1',
                 type: 'story',
-                text: '机库中，机械师正在为你安装新装备。\n\n"敌人的武器越来越厉害了，不过我们也搞到了一些新玩意儿。"\n\n他拍了拍你的机翼："试试这些新装备吧。"',
+                eventId: '4-opening',
             },
             {
                 id: '4-2',
@@ -219,7 +219,7 @@ export const STAGES = [
             {
                 id: '4-3',
                 type: 'story',
-                text: '轰炸机被击落，但战场上空出现了新的威胁。',
+                eventId: '4-mid',
             },
             {
                 id: '4-4',
@@ -238,7 +238,7 @@ export const STAGES = [
             {
                 id: '4-5',
                 type: 'story',
-                text: '你击落了敌军试验机！带回了珍贵的情报。\n\n解锁装备：ho-155 30mm机炮、九二式机枪',
+                eventId: '4-ending',
             },
         ],
     },
@@ -254,7 +254,7 @@ export const STAGES = [
             {
                 id: '5-1',
                 type: 'story',
-                text: '雷达站报告：大规模敌机编队正在接近！\n\n指挥官："这不是普通的编队——是重型轰炸机群，目标就是我们的基地！所有战机紧急升空！"',
+                eventId: '5-opening',
             },
             {
                 id: '5-2',
@@ -273,7 +273,7 @@ export const STAGES = [
             {
                 id: '5-3',
                 type: 'story',
-                text: '一架轰炸机拖着浓烟坠落。\n\n但更多的轰炸机正在逼近基地。你没有时间休息，立刻转向追击下一架。',
+                eventId: '5-mid',
             },
             {
                 id: '5-4',
@@ -292,7 +292,7 @@ export const STAGES = [
             {
                 id: '5-5',
                 type: 'story',
-                text: '轰炸机群被成功拦截，基地保住了！\n\n指挥官："你今天的表现超出了所有人预期。战争还会继续，但你已经证明了自己是真正的王牌。"\n\n解锁装备：70mm火箭弹、120mm火箭弹',
+                eventId: '5-ending',
             },
         ],
     },

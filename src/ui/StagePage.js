@@ -6,6 +6,7 @@ import gameState from '../GameState.js';
 import gameManager from '../GameManager.js';
 import { MenuButton } from './MenuButton.js';
 import { STAGES } from '../data/stageConfig.js';
+import { getStoryEvent } from '../data/storyEvents.js';
 
 export class StagePage {
     constructor(scene, container) {
@@ -18,14 +19,20 @@ export class StagePage {
         }).setOrigin(0.5);
         container.add(this.stageTitle);
 
+        // 剧情说话人标签
+        this.speakerLabel = scene.add.text(640, 140, '', {
+            fontSize: '15px', fontFamily: 'Arial', color: '#88aaff', fontWeight: 'bold',
+        }).setOrigin(0.5);
+        container.add(this.speakerLabel);
+
         // 节点描述框（带半透明背景）
         const textBg = scene.add.graphics();
         textBg.fillStyle(0x000000, 0.5);
-        textBg.fillRoundedRect(140, 80, 1000, 480, 12);
+        textBg.fillRoundedRect(140, 80, 1000, 460, 12);
         container.add(textBg);
 
         // 节点文本
-        this.nodeText = scene.add.text(640, 200, '', {
+        this.nodeText = scene.add.text(640, 180, '', {
             fontSize: '17px', fontFamily: 'Arial', color: '#ffffff',
             wordWrap: { width: 900 }, lineSpacing: 8,
         }).setOrigin(0.5, 0);
@@ -36,6 +43,10 @@ export class StagePage {
             fontSize: '15px', fontFamily: 'Arial', color: '#ffdd44',
         }).setOrigin(0.5);
         container.add(this.rewardText);
+
+        // 剧情段落索引（用于分节播放）
+        this._sectionIndex = 0;
+        this._sections = null;
 
         // 按钮容器
         this.actionButton = null;
@@ -63,10 +74,14 @@ export class StagePage {
             this.menuBtn = null;
         }
 
+        // 重置剧情分段状态
+        this._sectionIndex = 0;
+        this._sections = null;
+
         const stageRun = gameState.stageRun;
         if (!stageRun) {
-            // 尚未初始化关卡
             this.stageTitle.setText('无活动关卡');
+            this.speakerLabel.setText('');
             this.nodeText.setText('请初始化游戏。');
             this.rewardText.setText('');
             this.nextStageText.setText('');
@@ -86,11 +101,11 @@ export class StagePage {
 
         // 关卡已完成
         if (!node) {
+            this.speakerLabel.setText('');
             this.nodeText.setText('本关已完成！\n\n你可以继续挑战下一关。');
             this.rewardText.setText('');
             this.nextStageText.setText('');
 
-            // 解锁下一关
             const nextId = stageRun.stageId + 1;
             const nextConfig = STAGES.find(s => s.id === nextId);
             if (nextConfig) {
@@ -116,16 +131,9 @@ export class StagePage {
 
         // 显示节点内容
         if (node.type === 'story') {
-            this.nodeText.setText(node.text);
-            this.rewardText.setText('');
-            this.nextStageText.setText(`节点 ${stageRun.currentNode + 1} / ${stageRun.nodes.length} · 剧情`);
-
-            this.actionButton = new MenuButton(this.scene, 640, 580, 200, 50, '继续 →', () => {
-                gameManager.advanceNode();
-                this.refresh();
-            }, {}, this.container);
-
+            this._showStoryNode(node, stageRun);
         } else if (node.type === 'battle') {
+            this.speakerLabel.setText('');
             const desc = node.text || '迎战！';
             this.nodeText.setText(desc + '\n\n' +
                 `敌机：${node.enemy.name}\n` +
@@ -147,6 +155,62 @@ export class StagePage {
                 this.scene.scene.start('BattleScene');
             }, {}, this.container);
         }
+    }
+
+    /** 显示剧情节点（支持分段播放） */
+    _showStoryNode(node, stageRun) {
+        // 优先使用 eventId 从 STORY_EVENTS 加载
+        let event = null;
+        if (node.eventId) {
+            event = getStoryEvent(node.eventId);
+        }
+
+        if (event && event.sections && event.sections.length > 0) {
+            // 使用结构化剧情事件
+            this._sections = event.sections;
+            this._sectionIndex = 0;
+            this._renderSection();
+            this.nextStageText.setText(`节点 ${stageRun.currentNode + 1} / ${stageRun.nodes.length} · 剧情`);
+
+            // 若还有下一段则显示"下一段"，否则显示"继续 →"
+            this.actionButton = new MenuButton(this.scene, 640, 580, 200, 50, '下一段 →', () => {
+                this._sectionIndex++;
+                if (this._sectionIndex < this._sections.length) {
+                    this._renderSection();
+                    // 更新按钮文字：最后一段用"继续 →"
+                    if (this._sectionIndex === this._sections.length - 1) {
+                        this.actionButton.destroy();
+                        this.actionButton = new MenuButton(this.scene, 640, 580, 200, 50, '继续 →', () => {
+                            gameManager.advanceNode();
+                            this.refresh();
+                        }, {}, this.container);
+                    }
+                } else {
+                    gameManager.advanceNode();
+                    this.refresh();
+                }
+            }, {}, this.container);
+        } else {
+            // 兼容旧格式：直接使用 text 字段
+            this.speakerLabel.setText('');
+            this.nodeText.setText(node.text || '');
+            this.rewardText.setText('');
+            this.nextStageText.setText(`节点 ${stageRun.currentNode + 1} / ${stageRun.nodes.length} · 剧情`);
+
+            this.actionButton = new MenuButton(this.scene, 640, 580, 200, 50, '继续 →', () => {
+                gameManager.advanceNode();
+                this.refresh();
+            }, {}, this.container);
+        }
+    }
+
+    /** 渲染当前剧情段落 */
+    _renderSection() {
+        const section = this._sections[this._sectionIndex];
+        if (!section) return;
+        this.speakerLabel.setText(section.speaker ? `—— ${section.speaker}` : '');
+        this.nodeText.setText(section.text);
+        this.rewardText.setText('');
     }
 
     destroy() {
