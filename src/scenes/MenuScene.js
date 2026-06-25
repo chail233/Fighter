@@ -3,6 +3,8 @@ import { EquipPage } from '../ui/EquipPage.js';
 import { ShopPage } from '../ui/ShopPage.js';
 import { StagePage } from '../ui/StagePage.js';
 import gameManager from '../GameManager.js';
+import gameState from '../GameState.js';
+import { getStageById, getStageMenuMusic } from '../data/stageConfig.js';
 
 export class MenuScene extends Phaser.Scene {
     constructor() {
@@ -10,7 +12,10 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        gameManager.playMusic(this, 'Menu1');
+        // 根据当前关卡播放菜单 BGM
+        const stage = getStageById(gameState.stageRun ? gameState.stageRun.stageId : 1);
+        const menuBgm = getStageMenuMusic(stage);
+        gameManager.playMusic(this, menuBgm);
         this.currentPage = 0;
         this.totalPages = 3;
         this.pageContainer = [];

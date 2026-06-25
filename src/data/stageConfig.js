@@ -15,6 +15,9 @@
  *   - id            关卡编号
  *   - name          关卡名称
  *   - description   关卡简介（在战役页面展示）
+ *   - music         本关默认音乐（可选）
+ *       menu       菜单 BGM key，缺省 'Menu1'
+ *       battle     战斗 BGM key，缺省随机 Battle0~4
  *   - nodes[]       本关的节点列表，按顺序执行
  *
  * ========== 节点字段 ==========
@@ -29,6 +32,7 @@
  *
  * type: 'battle'
  *   text    战斗前的简短描述
+ *   music   本场战斗 BGM key（可选，缺省继承自关卡）
  *   enemy: {
  *     name      敌人显示名称
  *     texture   飞机贴图文件名（不含路径）
@@ -53,6 +57,10 @@ export const STAGES = [
         id: 1,
         name: '初阵',
         description: '初上战场，面对零散的敌机侦察，检验你的飞行技术。',
+        music: {
+            menu: 'Battle4',
+            battle: 'Menu1'
+        },
         nodes: [
             {
                 id: '1-1',
@@ -142,6 +150,10 @@ export const STAGES = [
         id: 3,
         name: '编队作战',
         description: '敌人开始采用双机编队战术，协同攻击。',
+        music: {
+            menu: 'Menu1',
+            battle: 'Battle0',
+        },
         nodes: [
             {
                 id: '3-1',
@@ -170,6 +182,7 @@ export const STAGES = [
             {
                 id: '3-4',
                 type: 'battle',
+                music: 'Battle2',
                 text: '一架涂装独特的零式战斗机冲入战场，飞行员明显是经验丰富的老手。',
                 enemy: {
                     name: '零式战斗机·初号机',
@@ -310,4 +323,23 @@ export function getStageById(stageId) {
  */
 export function getBattleEnemies(stage) {
     return stage.nodes.filter(n => n.type === 'battle').map(n => n.enemy);
+}
+
+/**
+ * 获取关卡的菜单 BGM key
+ * 缺省 'Menu1'
+ */
+export function getStageMenuMusic(stage) {
+    if (stage && stage.music && stage.music.menu) return stage.music.menu;
+    return 'Menu1';
+}
+
+/**
+ * 获取战斗节点的 BGM key
+ * 优先级：节点 music → 关卡 music.battle → 随机 Battle0~4
+ */
+export function getStageBattleMusic(stage, node) {
+    if (node && node.music) return node.music;
+    if (stage && stage.music && stage.music.battle) return stage.music.battle;
+    return `Battle${Math.floor(Math.random() * 5)}`;
 }

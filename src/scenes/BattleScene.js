@@ -1,5 +1,6 @@
 import gameState from '../GameState.js';
 import gameManager from '../GameManager.js';
+import { getStageById, getStageBattleMusic } from '../data/stageConfig.js';
 import { BattleHud } from '../ui/BattleHud.js';
 import { CombatLog } from '../ui/CombatLog.js';
 
@@ -54,9 +55,11 @@ export class BattleScene extends Phaser.Scene {
         // 战斗是否已结束
         this._ended = false;
 
-        // 播放战斗音乐（随机选一首 Battle0~4）
-        const trackId = `Battle${Phaser.Math.Between(0, 4)}`;
-        gameManager.playMusic(this, trackId);
+        // 播放战斗音乐（节点优先 → 关卡 → 随机）
+        const stage = getStageById(gameState.stageRun ? gameState.stageRun.stageId : 1);
+        const currentNode = gameManager.getCurrentNode();
+        const battleBgm = getStageBattleMusic(stage, currentNode);
+        gameManager.playMusic(this, battleBgm);
     }
 
     update(time, delta) {
