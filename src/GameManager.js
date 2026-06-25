@@ -5,6 +5,7 @@
 import { battleSystem } from './systems/BattleSystem.js';
 import { inventorySystem } from './systems/InventorySystem.js';
 import { stageLoader } from './systems/StageLoader.js';
+import { musicSystem } from './systems/MusicSystem.js';
 
 class GameManager {
     constructor() {
@@ -124,6 +125,12 @@ class GameManager {
 
     resetEquipment() {
         stageLoader.resetEquipment();
+    }
+
+    // ========== 音乐（委托 MusicSystem） ==========
+
+    playMusic(scene, key, loop = true) {
+        musicSystem.play(scene, key, loop);
     }
 
     // ========== 初始化 ==========

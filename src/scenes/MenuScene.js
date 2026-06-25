@@ -2,7 +2,7 @@ import { PageNavigator } from '../ui/PageNavigator.js';
 import { EquipPage } from '../ui/EquipPage.js';
 import { ShopPage } from '../ui/ShopPage.js';
 import { StagePage } from '../ui/StagePage.js';
-import { musicSystem } from '../systems/MusicSystem.js';
+import gameManager from '../GameManager.js';
 
 export class MenuScene extends Phaser.Scene {
     constructor() {
@@ -10,7 +10,7 @@ export class MenuScene extends Phaser.Scene {
     }
 
     create() {
-        musicSystem.play(this, 'Menu1');
+        gameManager.playMusic(this, 'Menu1');
         this.currentPage = 0;
         this.totalPages = 3;
         this.pageContainer = [];
