@@ -20,6 +20,9 @@ class GameState {
             maxHp: 500,
             defense: 0,
             gold: 0,
+            shield: 0,
+            maxShield: 0,
+
         };
 
         this.inventory = {
@@ -37,6 +40,9 @@ class GameState {
             maxHp: 500,
             defense: 0,
             equipment: [],     // 敌人装备（最多 EQUIPMENT_SLOTS）
+            shield: 0,
+            maxShield: 0,
+
         };
 
         // ========== 关卡进度 ==========
@@ -65,6 +71,9 @@ class GameState {
             maxHp: 500,
             defense: 0,
             gold: 0,
+            shield: 0,
+            maxShield: 0,
+
         };
         this.inventory = { equipment: [], items: [] };
         this.shopItems = [];
@@ -76,6 +85,9 @@ class GameState {
             maxHp: 500,
             defense: 0,
             equipment: [],
+            shield: 0,
+            maxShield: 0,
+
         };
         this.progress = { currentStage: 1, maxStage: 1, totalKills: 0 };
         this.stageRun = null;

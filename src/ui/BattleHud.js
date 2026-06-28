@@ -1,8 +1,9 @@
 // BattleHud - 战斗 HUD 顶层组件
-// 职责：整合血条、装备面板等战斗 UI
+// 职责：整合血条、防护值条、装备面板等战斗 UI
 // 不应：修改游戏规则
 
 import { HpBar } from './HpBar.js';
+import { ShieldBar } from './ShieldBar.js';
 import { EquipmentPanel } from './EquipmentPanel.js';
 import { Tooltip } from './Tooltip.js';
 
@@ -17,10 +18,12 @@ export class BattleHud {
         // 玩家 HUD（正下方居中）
         this.playerEquipPanel = new EquipmentPanel(scene, 465, 640, 44, this.tooltip);
         this.playerHpBar = new HpBar(scene, 490, 690, 300, 22, 100);
+        this.playerShieldBar = new ShieldBar(scene, 490, 714, 300, 16);
 
         // 敌人 HUD（正上方居中）
         this.enemyEquipPanel = new EquipmentPanel(scene, 465, 12, 44, this.tooltip);
         this.enemyHpBar = new HpBar(scene, 490, 62, 300, 22, 100);
+        this.enemyShieldBar = new ShieldBar(scene, 490, 38, 300, 16);
     }
 
     /**
@@ -30,6 +33,7 @@ export class BattleHud {
      */
     bindPlayer(player, inventory) {
         this.playerHpBar.update(player.hp, player.maxHp);
+        this.playerShieldBar.update(player.shield, player.maxShield || 1);
         this.playerEquipPanel.bindEquipment(inventory.equipment);
     }
 
@@ -39,6 +43,7 @@ export class BattleHud {
      */
     bindEnemy(enemy) {
         this.enemyHpBar.update(enemy.hp, enemy.maxHp);
+        this.enemyShieldBar.update(enemy.shield, enemy.maxShield || 1);
         this.enemyEquipPanel.bindEquipment(enemy.equipment);
     }
 
@@ -49,15 +54,19 @@ export class BattleHud {
      */
     update(player, enemy) {
         this.playerHpBar.update(player.hp, player.maxHp);
+        this.playerShieldBar.update(player.shield, player.maxShield || 1);
         this.enemyHpBar.update(enemy.hp, enemy.maxHp);
+        this.enemyShieldBar.update(enemy.shield, enemy.maxShield || 1);
         this.playerEquipPanel.update();
         this.enemyEquipPanel.update();
     }
 
     destroy() {
         this.playerHpBar.destroy();
+        this.playerShieldBar.destroy();
         this.playerEquipPanel.destroy();
         this.enemyHpBar.destroy();
+        this.enemyShieldBar.destroy();
         this.enemyEquipPanel.destroy();
         this.tooltip.destroy();
     }

@@ -17,9 +17,23 @@ class BattleSystem {
      * 造成伤害
      */
     dealDamage(damage, defender, defenderName, sourceName) {
-        const actual = Math.max(1, damage - defender.defense);
-        defender.hp = Math.max(0, defender.hp - actual);
-        this.log(`[${sourceName}] 造成 ${actual} 点伤害 → ${defenderName}(${defender.hp}/${defender.maxHp})`);
+        let actual = Math.max(1, damage - defender.defense);
+
+        // 先扣除防护值
+        if (defender.shield > 0) {
+            const shieldDamage = Math.min(defender.shield, actual);
+            defender.shield -= shieldDamage;
+            actual -= shieldDamage;
+            this.log(`[${sourceName}] 防护值抵消 ${shieldDamage} 点伤害 → ${defenderName}(防护 ${defender.shield}/${defender.maxShield})`);
+        }
+
+        // 剩余伤害扣除生命值
+        if (actual > 0) {
+            defender.hp = Math.max(0, defender.hp - actual);
+            this.log(`[${sourceName}] 造成 ${actual} 点伤害 → ${defenderName}(${defender.hp}/${defender.maxHp})`);
+        } else {
+            this.log(`[${sourceName}] 伤害被完全抵挡！`);
+        }
 
         // 受击方反击：检查是否有八九式回旋机枪
         this._triggerCounter(defender);
@@ -31,9 +45,22 @@ class BattleSystem {
      * 反击攻击入口（与 weaponAttack 类似，但不触发防反被动）
      */
     counterAttack(owner, target, weapon) {
-        const actual = Math.max(1, weapon.value - target.defense);
-        target.hp = Math.max(0, target.hp - actual);
-        this.log(`[${weapon.name}] 反击 ${actual} 点伤害 → ${target.name}(${target.hp}/${target.maxHp})`);
+        let actual = Math.max(1, weapon.value - target.defense);
+
+        // 先扣除防护值
+        if (target.shield > 0) {
+            const shieldDamage = Math.min(target.shield, actual);
+            target.shield -= shieldDamage;
+            actual -= shieldDamage;
+            this.log(`[${weapon.name}] 防护值抵消 ${shieldDamage} 点伤害 → ${target.name}(防护 ${target.shield}/${target.maxShield})`);
+        }
+
+        if (actual > 0) {
+            target.hp = Math.max(0, target.hp - actual);
+            this.log(`[${weapon.name}] 反击 ${actual} 点伤害 → ${target.name}(${target.hp}/${target.maxHp})`);
+        } else {
+            this.log(`[${weapon.name}] 反击被完全抵挡！`);
+        }
 
         // 己方被动效果（一式加速、九九式相邻）正常触发
         if (weapon.category === 'weapon') {
