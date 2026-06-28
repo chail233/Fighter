@@ -16,14 +16,14 @@ export class BattleHud {
         this.tooltip = new Tooltip(scene);
 
         // 玩家 HUD（正下方居中）
-        this.playerEquipPanel = new EquipmentPanel(scene, 465, 640, 44, this.tooltip);
-        this.playerHpBar = new HpBar(scene, 490, 690, 300, 22, 100);
-        this.playerShieldBar = new ShieldBar(scene, 490, 714, 300, 16);
+        this.playerEquipPanel = new EquipmentPanel(scene, 465, 635, 44, this.tooltip);
+        this.playerHpBar = new HpBar(scene, 490, 702, 300, 18, 100);
+        this.playerShieldBar = new ShieldBar(scene, 490, 684, 300, 14);
 
         // 敌人 HUD（正上方居中）
         this.enemyEquipPanel = new EquipmentPanel(scene, 465, 12, 44, this.tooltip);
-        this.enemyHpBar = new HpBar(scene, 490, 62, 300, 22, 100);
-        this.enemyShieldBar = new ShieldBar(scene, 490, 38, 300, 16);
+        this.enemyHpBar = new HpBar(scene, 490, 78, 300, 18, 100);
+        this.enemyShieldBar = new ShieldBar(scene, 490, 60, 300, 14);
     }
 
     /**
