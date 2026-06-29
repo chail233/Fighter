@@ -21,6 +21,12 @@ class GameManager {
         battleSystem.bindLogger((text) => combatLog.add(text));
     }
 
+    // ========== 日志 ==========
+
+    log(text) {
+        battleSystem.log(text);
+    }
+
     // ========== 战斗（委托 BattleSystem） ==========
 
     dealDamage(damage, defender, defenderName, sourceName) {

@@ -3,6 +3,7 @@
 // 不应：修改游戏逻辑
 
 import { Equipment } from '../entities/Equipment.js';
+import gameState from '../GameState.js';
 
 /**
  * 根据配置创建装备实例
@@ -192,6 +193,28 @@ export const EQUIPMENT_CONFIGS = {
                 const targetEq = candidates[Math.floor(Math.random() * candidates.length)];
                 gm.modifyCooldown(targetEq, 5);
             }
+        },
+    },
+    '13mm-back-armor': {
+        id: '13mm-back-armor',
+        name: '13mm背部防弹钢板',
+        category: 'armor',
+        description: '周期性提供防护值，抵御敌方攻击',
+        value: 10,
+        price: 90,
+        cooldown: 5,
+        effect: (owner, target, gm, eq) => {
+            // BattleSystem.update 中 owner 是浅拷贝，通过 equipment 数组引用判断真实所有者
+            const realOwner = owner.equipment === gameState.inventory.equipment
+                ? gameState.player
+                : gameState.enemy;
+            // 增加防护值
+            realOwner.shield += eq.value;
+            // 更新最大防护值显示
+            if (realOwner.shield > realOwner.maxShield) {
+                realOwner.maxShield = realOwner.shield;
+            }
+            gm.log(`[${eq.name}] 提供 ${eq.value} 点防护值 → ${realOwner.name}(防护 ${realOwner.shield}/${realOwner.maxShield})`);
         },
     },
 };
