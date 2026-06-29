@@ -33,7 +33,7 @@ export class BattleHud {
      */
     bindPlayer(player, inventory) {
         this.playerHpBar.update(player.hp, player.maxHp);
-        this.playerShieldBar.update(player.shield, player.maxShield || 1);
+        this.playerShieldBar.update(player.shield);
         this.playerEquipPanel.bindEquipment(inventory.equipment);
     }
 
@@ -43,7 +43,7 @@ export class BattleHud {
      */
     bindEnemy(enemy) {
         this.enemyHpBar.update(enemy.hp, enemy.maxHp);
-        this.enemyShieldBar.update(enemy.shield, enemy.maxShield || 1);
+        this.enemyShieldBar.update(enemy.shield);
         this.enemyEquipPanel.bindEquipment(enemy.equipment);
     }
 
@@ -54,9 +54,9 @@ export class BattleHud {
      */
     update(player, enemy) {
         this.playerHpBar.update(player.hp, player.maxHp);
-        this.playerShieldBar.update(player.shield, player.maxShield || 1);
+        this.playerShieldBar.update(player.shield);
         this.enemyHpBar.update(enemy.hp, enemy.maxHp);
-        this.enemyShieldBar.update(enemy.shield, enemy.maxShield || 1);
+        this.enemyShieldBar.update(enemy.shield);
         this.playerEquipPanel.update();
         this.enemyEquipPanel.update();
     }

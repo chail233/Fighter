@@ -210,11 +210,7 @@ export const EQUIPMENT_CONFIGS = {
                 : gameState.enemy;
             // 增加防护值
             realOwner.shield += eq.value;
-            // 更新最大防护值显示
-            if (realOwner.shield > realOwner.maxShield) {
-                realOwner.maxShield = realOwner.shield;
-            }
-            gm.log(`[${eq.name}] 提供 ${eq.value} 点防护值 → ${realOwner.name}(防护 ${realOwner.shield}/${realOwner.maxShield})`);
+            gm.log(`[${eq.name}] 提供 ${eq.value} 点防护值 → ${realOwner.name}(防护 ${realOwner.shield})`);
         },
     },
 };

@@ -96,7 +96,6 @@ class StageLoader {
 
         // 重置玩家防护值
         gameState.player.shield = 0;
-        gameState.player.maxShield = 0;
 
         // 重置所有玩家装备（从 ID 重建，清除上个战斗累积的 value/cooldownTimer）
         const playerEqIds = gameState.inventory.equipment.map(eq => eq.id);
@@ -113,7 +112,6 @@ class StageLoader {
         gameState.enemy.maxHp = enemy.maxHp;
         gameState.enemy.defense = enemy.defense;
         gameState.enemy.shield = enemy.shield || 0;
-        gameState.enemy.maxShield = enemy.maxShield || 0;
         gameState.enemy.equipment = (node._equipmentIds || []).map(id => createEquipment(id)).filter(Boolean);
 
         return true;

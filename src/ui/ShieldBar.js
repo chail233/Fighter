@@ -1,5 +1,5 @@
 // ShieldBar - 防护值条组件
-// 职责：显示当前/最大防护值的进度条
+// 职责：显示当前防护值的进度条（防护值无上限，按当前值占固定宽度比例显示）
 // 不应：修改防护值数据
 
 export class ShieldBar {
@@ -18,7 +18,6 @@ export class ShieldBar {
         this.height = height;
 
         this.currentShield = 0;
-        this.maxShield = 0;
 
         // 背景（深灰色）
         this.bg = scene.add.graphics();
@@ -35,7 +34,7 @@ export class ShieldBar {
         this.border.strokeRoundedRect(x, y, width, height, 4);
 
         // 文字
-        this.text = scene.add.text(x + width / 2, y + height / 2, '防护 0/0', {
+        this.text = scene.add.text(x + width / 2, y + height / 2, '防护 0', {
             fontSize: '12px',
             fontFamily: 'Arial',
             color: '#88bbff',
@@ -47,16 +46,15 @@ export class ShieldBar {
     /**
      * 更新防护值条显示
      * @param {number} currentShield
-     * @param {number} maxShield
      */
-    update(currentShield, maxShield) {
+    update(currentShield) {
         this.currentShield = currentShield;
-        this.maxShield = maxShield;
 
-        const ratio = maxShield > 0 ? Math.max(0, Math.min(1, currentShield / maxShield)) : 0;
+        // 防护值无上限，用当前值 / 100 作为显示比例（上限 1）
+        const ratio = Math.min(1, currentShield / 100);
         this.drawFill(ratio);
 
-        this.text.setText(`防护 ${Math.ceil(currentShield)}/${maxShield}`);
+        this.text.setText(`防护 ${Math.ceil(currentShield)}`);
     }
 
     drawFill(ratio) {

@@ -24,7 +24,7 @@ class BattleSystem {
             const shieldDamage = Math.min(defender.shield, actual);
             defender.shield -= shieldDamage;
             actual -= shieldDamage;
-            this.log(`[${sourceName}] 防护值抵消 ${shieldDamage} 点伤害 → ${defenderName}(防护 ${defender.shield}/${defender.maxShield})`);
+            this.log(`[${sourceName}] 防护值抵消 ${shieldDamage} 点伤害 → ${defenderName}(防护 ${defender.shield})`);
         }
 
         // 剩余伤害扣除生命值
@@ -52,7 +52,7 @@ class BattleSystem {
             const shieldDamage = Math.min(target.shield, actual);
             target.shield -= shieldDamage;
             actual -= shieldDamage;
-            this.log(`[${weapon.name}] 防护值抵消 ${shieldDamage} 点伤害 → ${target.name}(防护 ${target.shield}/${target.maxShield})`);
+            this.log(`[${weapon.name}] 防护值抵消 ${shieldDamage} 点伤害 → ${target.name}(防护 ${target.shield})`);
         }
 
         if (actual > 0) {
