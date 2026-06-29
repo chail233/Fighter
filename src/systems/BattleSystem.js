@@ -173,6 +173,16 @@ class BattleSystem {
     }
 
     /**
+     * 修改防护值（封装，避免直接访问 shield）
+     * @param {number} amount - 增加/减少的防护值
+     * @param {object} target - gameState.player 或 gameState.enemy
+     */
+    modifyShield(amount, target) {
+        if (!target) return;
+        target.shield = Math.max(0, target.shield + amount);
+    }
+
+    /**
      * 主循环：更新双方装备 CD，自动触发就绪装备
      */
     update(delta) {

@@ -208,8 +208,7 @@ export const EQUIPMENT_CONFIGS = {
             const realOwner = owner.equipment === gameState.inventory.equipment
                 ? gameState.player
                 : gameState.enemy;
-            // 增加防护值
-            realOwner.shield += eq.value;
+            gm.modifyShield(eq.value, realOwner);
             gm.log(`[${eq.name}] 提供 ${eq.value} 点防护值 → ${realOwner.name}(防护 ${realOwner.shield})`);
         },
     },

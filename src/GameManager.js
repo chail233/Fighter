@@ -53,6 +53,10 @@ class GameManager {
         return battleSystem.modifyValue(equipment, delta);
     }
 
+    modifyShield(amount, target) {
+        return battleSystem.modifyShield(amount, target);
+    }
+
     update(delta) {
         battleSystem.update(delta);
     }
