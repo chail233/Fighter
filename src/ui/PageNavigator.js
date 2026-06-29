@@ -46,7 +46,7 @@ export class PageNavigator {
     }
 
     switchPage(delta) {
-        const names = ['装备管理', '商店', '出击'];
+        const names = ['装备管理', '商店', '出击', '调试'];
         const newPage = Phaser.Math.Clamp(this.currentPage + delta, 0, this.totalPages - 1);
         if (newPage === this.currentPage) return;
 
@@ -56,7 +56,7 @@ export class PageNavigator {
     }
 
     updateIndicator() {
-        const names = ['装备管理', '商店', '出击'];
+        const names = ['装备管理', '商店', '出击', '调试'];
         this.indicator.setText(`${names[this.currentPage] || ''} (${this.currentPage + 1}/${this.totalPages})`);
     }
 }

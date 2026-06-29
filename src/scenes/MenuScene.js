@@ -2,6 +2,7 @@ import { PageNavigator } from '../ui/PageNavigator.js';
 import { EquipPage } from '../ui/EquipPage.js';
 import { ShopPage } from '../ui/ShopPage.js';
 import { StagePage } from '../ui/StagePage.js';
+import { DebugPage } from '../ui/DebugPage.js';
 import gameManager from '../GameManager.js';
 import gameState from '../GameState.js';
 import { getStageById, getStageMenuMusic } from '../data/stageConfig.js';
@@ -17,7 +18,7 @@ export class MenuScene extends Phaser.Scene {
         const menuBgm = getStageMenuMusic(stage);
         gameManager.playMusic(this, menuBgm);
         this.currentPage = 0;
-        this.totalPages = 3;
+        this.totalPages = 4;
         this.pageContainer = [];
         this.pages = [];
 
@@ -30,6 +31,7 @@ export class MenuScene extends Phaser.Scene {
         this.pages[0] = new EquipPage(this, this.pageContainer[0]);
         this.pages[1] = new ShopPage(this, this.pageContainer[1]);
         this.pages[2] = new StagePage(this, this.pageContainer[2]);
+        this.pages[3] = new DebugPage(this, this.pageContainer[3]);
 
         this.navigator = new PageNavigator(this, this.totalPages, (page) => {
             this.pageContainer[this.currentPage].setVisible(false);
@@ -42,6 +44,8 @@ export class MenuScene extends Phaser.Scene {
             if (page === 1) this.pages[1].refresh();
             // 切到关卡页时刷新节点
             if (page === 2) this.pages[2].refresh();
+            // 切到调试页时刷新
+            if (page === 3) this.pages[3].refresh();
         });
     }
 }
