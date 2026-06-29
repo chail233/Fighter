@@ -18,6 +18,7 @@ class BattleSystem {
      */
     dealDamage(damage, defender, defenderName, sourceName) {
         let actual = Math.max(1, damage - defender.defense);
+        const beforeShield = actual;  // 防护值减免前的伤害（用于触发受击被动）
 
         // 先扣除防护值
         if (defender.shield > 0) {
@@ -35,8 +36,8 @@ class BattleSystem {
             this.log(`[${sourceName}] 伤害被完全抵挡！`);
         }
 
-        // 受击方反击：检查是否有八九式回旋机枪
-        this._triggerCounter(defender);
+        // 受击方被动效果：检查八九式回旋机枪、九二式机枪、30mm复合防弹风挡等
+        this._triggerCounter(defender, beforeShield);
 
         return actual;
     }
@@ -89,9 +90,11 @@ class BattleSystem {
     }
 
     /**
-     * 受击时触发己方八九式回旋机枪立即反击
+     * 受击时触发己方被动装备效果
+     * @param {object} defender - 受击方（gameState.player 或 gameState.enemy）
+     * @param {number} actualDamage - 实际造成的伤害（经防御和护盾减免后）
      */
-    _triggerCounter(defender) {
+    _triggerCounter(defender, actualDamage) {
         let owner, target;
         // 通过引用比较判断受击方（gameState.player/enemy 直接作为 defender 传入）
         if (defender === gameState.player) {
@@ -110,6 +113,10 @@ class BattleSystem {
             if (eq.id === '92-gun') {
                 this.modifyValue(eq, 2);
                 this.log(`[九二式机枪] 强度 +2（当前 ${eq.value}）`);
+            }
+            if (eq.id === '30mm-windshield' && actualDamage < 15) {
+                this.modifyCooldown(eq, -1);
+                this.log(`[30mm复合防弹风挡] 受到 ${actualDamage} 点伤害（<15），加速1s`);
             }
         }
     }

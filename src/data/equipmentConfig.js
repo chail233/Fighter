@@ -212,4 +212,20 @@ export const EQUIPMENT_CONFIGS = {
             gm.log(`[${eq.name}] 提供 ${eq.value} 点防护值 → ${realOwner.name}(防护 ${realOwner.shield})`);
         },
     },
+    '30mm-windshield': {
+        id: '30mm-windshield',
+        name: '30mm复合防弹风挡',
+        category: 'armor',
+        description: '周期性提供防护值；受到小于15的伤害时，自身冷却加速1s',
+        value: 15,
+        price: 130,
+        cooldown: 7,
+        effect: (owner, target, gm, eq) => {
+            const realOwner = owner.equipment === gameState.inventory.equipment
+                ? gameState.player
+                : gameState.enemy;
+            gm.modifyShield(eq.value, realOwner);
+            gm.log(`[${eq.name}] 提供 ${eq.value} 点防护值 → ${realOwner.name}(防护 ${realOwner.shield})`);
+        },
+    },
 };
